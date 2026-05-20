@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inibara – Tableau de bord Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --brick:#B5382A;--brick-dark:#8C2820;--brick-light:#D4544A;
+      --brick-glow:rgba(181,56,42,0.12);
+      --navy:#0F1F3D;--navy-mid:#162848;--navy-light:#1E3560;
+      --gold:#D4A843;--gold-light:#F0C96A;
+      --green:#22C55E;--red:#F43F5E;--blue:#60A5FA;--yellow:#FBBF24;
+      --bg:#0A1020;--s1:#0F1A30;--s2:#142038;--s3:#1A2845;--s4:#203050;
+      --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+      --muted:rgba(255,255,255,0.4);--sub:rgba(255,255,255,0.6);
+      --white:#FFFFFF;--gray:#6B7280;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html,body{height:100%;overflow:hidden;}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--white);display:flex;}
+
+    /* SIDEBAR */
+    .sidebar{width:230px;min-width:230px;background:var(--s1);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;}
+    .sb-logo{padding:22px 20px 18px;border-bottom:1px solid var(--border);}
+    .logo-wrap{display:flex;align-items:center;gap:10px;}
+    .logo-mark{width:34px;height:34px;background:linear-gradient(135deg,var(--brick),var(--brick-dark));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;color:#fff;box-shadow:0 4px 10px rgba(181,56,42,0.3);}
+    .logo-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;color:var(--white);}
+    .logo-text span{color:var(--brick-light);}
+    .admin-tag{font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:6px;}
+    .sb-nav{flex:1;padding:14px 12px;overflow-y:auto;}
+    .nav-grp{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--gray);padding:12px 8px 5px;}
+    .nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;cursor:pointer;transition:all .18s;font-size:0.84rem;color:var(--muted);margin-bottom:2px;}
+    .nav-item:hover{background:rgba(255,255,255,0.05);color:var(--white);}
+    .nav-item.active{background:var(--brick-glow);color:var(--brick-light);border-left:2px solid var(--brick);}
+    .nav-item .ni{font-size:0.95rem;width:18px;text-align:center;}
+    .nb{margin-left:auto;background:var(--brick);color:#fff;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:50px;}
+    .nb.gold{background:var(--gold);}
+    .sb-footer{padding:14px;border-top:1px solid var(--border);}
+    .admin-user{display:flex;align-items:center;gap:10px;}
+    .au-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--brick),var(--brick-dark));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:800;font-size:0.82rem;}
+    .au-name{font-size:0.84rem;font-weight:600;}
+    .au-role{font-size:0.68rem;color:var(--muted);}
+
+    /* MAIN */
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+    .topbar{padding:14px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--s1);flex-shrink:0;}
+    .page-title{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:800;}
+    .page-sub{font-size:0.75rem;color:var(--muted);margin-top:2px;}
+    .tb-right{display:flex;align-items:center;gap:10px;}
+    .tab-bar{display:flex;gap:3px;background:var(--s3);padding:3px;border-radius:8px;}
+    .tab{padding:7px 14px;border-radius:6px;border:none;background:none;color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;font-size:0.78rem;transition:all .2s;}
+    .tab.active{background:var(--brick);color:#fff;font-weight:600;}
+    .tb-btn{padding:7px 16px;border-radius:7px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;font-size:0.8rem;font-weight:500;transition:all .2s;}
+    .tb-ghost{background:rgba(255,255,255,0.06);color:var(--white);}
+    .tb-brick{background:var(--brick);color:#fff;}
+    .tb-brick:hover{background:var(--brick-dark);}
+    .nb-btn{position:relative;width:34px;height:34px;background:rgba(255,255,255,0.06);border:none;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;}
+    .nb-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--brick);border-radius:50%;}
+
+    .content{flex:1;overflow-y:auto;padding:20px 24px;}
+
+    /* WELCOME */
+    .welcome{background:linear-gradient(120deg,var(--navy-mid),var(--s3));border:1px solid rgba(181,56,42,0.2);border-radius:14px;padding:22px 26px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;overflow:hidden;}
+    .welcome::before{content:'';position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(181,56,42,0.15),transparent 70%);}
+    .welcome-left h2{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:800;}
+    .welcome-left p{color:var(--muted);font-size:0.82rem;margin-top:5px;}
+    .welcome-stats{display:flex;gap:28px;position:relative;z-index:1;}
+    .ws{text-align:center;}
+    .ws-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:800;color:var(--brick-light);}
+    .ws-label{font-size:0.68rem;color:var(--muted);margin-top:2px;}
+
+    /* STAT CARDS */
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+    .sc{background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:18px 20px;transition:border-color .2s,transform .2s;position:relative;overflow:hidden;}
+    .sc:hover{border-color:rgba(181,56,42,0.25);transform:translateY(-2px);}
+    .sc::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+    .sc.brick::after{background:linear-gradient(90deg,var(--brick),var(--brick-light));}
+    .sc.gold::after{background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+    .sc.green::after{background:var(--green);}
+    .sc.blue::after{background:var(--blue);}
+    .sc-top{display:flex;align-items:flex-start;justify-content:space-between;}
+    .sc-icon{font-size:1.2rem;}
+    .sc-trend{font-size:0.68rem;font-weight:600;padding:3px 7px;border-radius:50px;}
+    .up{background:rgba(34,197,94,0.1);color:var(--green);}
+    .down{background:rgba(244,63,94,0.1);color:var(--red);}
+    .sc-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:800;margin-top:12px;line-height:1;}
+    .sc-label{font-size:0.74rem;color:var(--muted);margin-top:5px;}
+
+    /* PANELS */
+    .grid2{display:grid;grid-template-columns:1fr 320px;gap:14px;margin-bottom:14px;}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+    .panel{background:var(--s2);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+    .ph{padding:15px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .ph-title{font-family:'Playfair Display',serif;font-size:0.92rem;font-weight:700;}
+    .ph-sub{font-size:0.7rem;color:var(--gray);margin-top:2px;}
+    .ph-action{font-size:0.74rem;color:var(--brick-light);cursor:pointer;background:none;border:none;}
+    .pb{padding:16px 20px;}
+
+    /* CHART */
+    .bars{display:flex;align-items:flex-end;gap:7px;height:120px;}
+    .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
+    .bar{width:100%;border-radius:5px 5px 0 0;cursor:pointer;transition:opacity .2s;}
+    .bar:hover{opacity:.75;}
+    .bar-label{font-size:0.65rem;color:var(--muted);}
+
+    /* TABLE */
+    .tw{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;}
+    th{font-size:0.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--gray);padding:10px 16px;text-align:left;border-bottom:1px solid var(--border);font-weight:500;}
+    td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:0.83rem;vertical-align:middle;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:rgba(255,255,255,0.02);}
+    .td-av{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:0.7rem;font-weight:800;}
+    .td-name-wrap{display:flex;align-items:center;gap:9px;}
+    .bs{padding:3px 9px;border-radius:50px;font-size:0.68rem;font-weight:600;}
+    .s-active{background:rgba(34,197,94,0.1);color:var(--green);}
+    .s-pending{background:rgba(212,168,67,0.1);color:var(--gold);}
+    .s-suspended{background:rgba(244,63,94,0.1);color:var(--red);}
+    .act-btn{background:rgba(255,255,255,0.05);border:none;color:var(--white);padding:4px 11px;border-radius:5px;font-size:0.72rem;cursor:pointer;transition:background .2s;}
+    .act-btn:hover{background:var(--brick-glow);color:var(--brick-light);}
+
+    /* REVENUE */
+    .rev-big{text-align:center;padding:18px 0 14px;}
+    .rev-amount{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:800;color:var(--brick-light);}
+    .rev-label{font-size:0.75rem;color:var(--muted);margin-top:4px;}
+    .rev-rows{display:flex;flex-direction:column;gap:0;}
+    .rev-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.8rem;}
+    .rev-row:last-child{border-bottom:none;}
+    .rev-row .lbl{color:var(--muted);}
+    .rev-row .val{font-weight:600;}
+
+    /* PENDING */
+    .pending-list{display:flex;flex-direction:column;gap:9px;}
+    .pi{display:flex;align-items:center;gap:11px;padding:11px;background:var(--s3);border-radius:9px;}
+    .pi-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:800;font-size:0.8rem;flex-shrink:0;}
+    .pi-name{font-size:0.83rem;font-weight:500;}
+    .pi-meta{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+    .pi-btns{display:flex;gap:5px;margin-left:auto;}
+    .p-ok{background:rgba(34,197,94,0.1);color:var(--green);border:none;padding:5px 11px;border-radius:5px;font-size:0.72rem;cursor:pointer;}
+    .p-no{background:rgba(244,63,94,0.1);color:var(--red);border:none;padding:5px 9px;border-radius:5px;font-size:0.72rem;cursor:pointer;}
+
+    /* DONUT */
+    .donut-wrap{display:flex;align-items:center;gap:20px;}
+    .legend{display:flex;flex-direction:column;gap:8px;}
+    .li{display:flex;align-items:center;gap:7px;font-size:0.78rem;}
+    .ld{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+    .lv{margin-left:auto;font-weight:600;font-size:0.8rem;}
+
+    /* CITIES */
+    .city-list{display:flex;flex-direction:column;gap:9px;}
+    .ci-row{display:flex;align-items:center;gap:10px;}
+    .ci-rank{font-family:'Playfair Display',serif;font-weight:800;font-size:0.78rem;color:var(--muted);width:16px;}
+    .ci-name{font-size:0.82rem;flex:1;}
+    .ci-bar{flex:2;height:5px;background:rgba(255,255,255,0.05);border-radius:3px;}
+    .ci-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--brick),var(--brick-light));}
+    .ci-cnt{font-size:0.72rem;color:var(--muted);width:36px;text-align:right;}
+
+    /* FEED */
+    .feed{display:flex;flex-direction:column;gap:0;}
+    .fi{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);}
+    .fi:last-child{border-bottom:none;}
+    .fi-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;}
+    .fi-green{background:rgba(34,197,94,0.1);}
+    .fi-brick{background:rgba(181,56,42,0.1);}
+    .fi-blue{background:rgba(96,165,250,0.1);}
+    .fi-gold{background:rgba(212,168,67,0.1);}
+    .fi-red{background:rgba(244,63,94,0.1);}
+    .fi-main{font-size:0.8rem;line-height:1.4;color:var(--sub);}
+    .fi-main strong{color:var(--white);}
+    .fi-time{font-size:0.68rem;color:var(--muted);margin-top:3px;}
+
+    ::-webkit-scrollbar{width:3px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:rgba(181,56,42,0.3);border-radius:2px;}
+
+    #toast{position:fixed;bottom:20px;right:20px;z-index:999;background:var(--s2);border-left:3px solid var(--brick);color:#fff;padding:11px 18px;border-radius:8px;font-size:0.82rem;opacity:0;transform:translateY(8px);transition:all .28s;pointer-events:none;}
+  </style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="logo-wrap">
+      <div class="logo-mark">I</div>
+      <div class="logo-text">Inibara<span>.ci</span></div>
+    </div>
+    <div class="admin-tag">Administration</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-grp">Principal</div>
+    <div class="nav-item active" onclick="setPage(this,'Vue d\'ensemble')"><span class="ni">📊</span>Tableau de bord</div>
+    <div class="nav-item" onclick="setPage(this,'Artisans')"><span class="ni">🔧</span>Artisans <span class="nb">12</span></div>
+    <div class="nav-item" onclick="setPage(this,'Clients')"><span class="ni">👥</span>Clients</div>
+    <div class="nav-item" onclick="setPage(this,'Missions')"><span class="ni">📋</span>Missions</div>
+    <div class="nav-item" onclick="setPage(this,'Paiements')"><span class="ni">💳</span>Paiements</div>
+    <div class="nav-grp">Contenu</div>
+    <div class="nav-item" onclick="setPage(this,'Métiers')"><span class="ni">🗂️</span>Métiers</div>
+    <div class="nav-item" onclick="setPage(this,'Villes')"><span class="ni">🏙️</span>Villes</div>
+    <div class="nav-item" onclick="setPage(this,'Avis')"><span class="ni">⭐</span>Avis & Notes</div>
+    <div class="nav-grp">Système</div>
+    <div class="nav-item" onclick="setPage(this,'Signalements')"><span class="ni">🚨</span>Signalements <span class="nb" style="background:var(--red)">3</span></div>
+    <div class="nav-item" onclick="setPage(this,'Paramètres')"><span class="ni">⚙️</span>Paramètres</div>
+  </nav>
+  <div class="sb-footer">
+    <div class="admin-user">
+      <div class="au-av">AD</div>
+      <div><div class="au-name">Administrateur</div><div class="au-role">Super Admin · Inibara</div></div>
+    </div>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="page-title" id="pageTitle">Vue d'ensemble</div><div class="page-sub">Mardi 19 mai 2026 · Côte d'Ivoire 🇨🇮</div></div>
+    <div class="tb-right">
+      <div class="tab-bar">
+        <button class="tab active" onclick="setTab(this)">Aujourd'hui</button>
+        <button class="tab" onclick="setTab(this)">Semaine</button>
+        <button class="tab" onclick="setTab(this)">Mois</button>
+      </div>
+      <button class="nb-btn">🔔<div class="nb-dot"></div></button>
+      <button class="tb-btn tb-brick" onclick="toast('Export en cours…')">⬇ Exporter</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="welcome">
+      <div class="welcome-left"><h2>Bonjour, Admin 👋</h2><p>Inibara est <strong style="color:var(--green)">opérationnel</strong> · 3 artisans en attente de validation</p></div>
+      <div class="welcome-stats">
+        <div class="ws"><div class="ws-num">1 284</div><div class="ws-label">Artisans</div></div>
+        <div class="ws"><div class="ws-num">4.8★</div><div class="ws-label">Note moy.</div></div>
+        <div class="ws"><div class="ws-num">98%</div><div class="ws-label">Satisfaction</div></div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="sc brick"><div class="sc-top"><span class="sc-icon">🔧</span><span class="sc-trend up">+14%</span></div><div class="sc-num">1 284</div><div class="sc-label">Artisans inscrits</div></div>
+      <div class="sc green"><div class="sc-top"><span class="sc-icon">👥</span><span class="sc-trend up">+22%</span></div><div class="sc-num">8 741</div><div class="sc-label">Clients actifs</div></div>
+      <div class="sc blue"><div class="sc-top"><span class="sc-icon">📋</span><span class="sc-trend up">+8%</span></div><div class="sc-num">3 509</div><div class="sc-label">Missions ce mois</div></div>
+      <div class="sc gold"><div class="sc-top"><span class="sc-icon">💰</span><span class="sc-trend up">+31%</span></div><div class="sc-num">4,2M</div><div class="sc-label">Commissions (FCFA)</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <div class="ph"><div><div class="ph-title">Activité des missions</div><div class="ph-sub">7 derniers jours</div></div><button class="ph-action">Détails →</button></div>
+        <div class="pb"><div class="bars" id="chartBars"></div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ph-title">Revenus & Commissions</div></div>
+        <div class="pb">
+          <div class="rev-big"><div class="rev-amount">4 218 500</div><div class="rev-label">FCFA encaissés ce mois</div></div>
+          <div class="rev-rows">
+            <div class="rev-row"><span class="lbl">🟠 Orange Money</span><span class="val">1 840 000</span></div>
+            <div class="rev-row"><span class="lbl">🔵 Wave</span><span class="val">1 520 000</span></div>
+            <div class="rev-row"><span class="lbl">🟡 MTN MoMo</span><span class="val">858 500</span></div>
+            <div class="rev-row"><span class="lbl">Commission moyenne</span><span class="val" style="color:var(--green)">8.4%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <div class="ph"><div><div class="ph-title">Artisans récents</div><div class="ph-sub">Dernières inscriptions</div></div><button class="ph-action" onclick="setPage(null,'Artisans')">Voir tous →</button></div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Artisan</th><th>Métier</th><th>Ville</th><th>Note</th><th>Statut</th><th></th></tr></thead>
+            <tbody id="artisanTable"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div><div class="ph-title">Validations en attente</div><div class="ph-sub">4 profils à examiner</div></div></div>
+        <div class="pb"><div class="pending-list" id="pendingList"></div></div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="panel">
+        <div class="ph"><div class="ph-title">Répartition métiers</div></div>
+        <div class="pb"><div class="donut-wrap"><svg width="90" height="90" viewBox="0 0 100 100" id="donutSvg"></svg><div class="legend" id="donutLegend"></div></div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ph-title">Top villes</div></div>
+        <div class="pb"><div class="city-list" id="cityList"></div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div class="ph-title">Activité récente</div></div>
+        <div class="pb" style="padding:0 16px;"><div class="feed" id="actFeed"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script>
+const artData=[
+  {i:'KK',c:'#B5382A',bg:'#2D0A08',name:'Koffi Kouamé',metier:'Plombier',ville:'Cocody',note:4.9,status:'active'},
+  {i:'DB',c:'#60A5FA',bg:'#0A1628',name:'Dramane Bamba',metier:'Électricien',ville:'Yopougon',note:4.7,status:'active'},
+  {i:'AN',c:'#22C55E',bg:'#052010',name:'Awa N\'Goran',metier:'Menuisière',ville:'Marcory',note:4.8,status:'pending'},
+  {i:'IC',c:'#A78BFA',bg:'#170A28',name:'Issa Coulibaly',metier:'Mécanicien',ville:'Abobo',note:4.6,status:'active'},
+  {i:'FD',c:'#F472B6',bg:'#280A1A',name:'Fatou Diallo',metier:'Peintre',ville:'Plateau',note:5.0,status:'suspended'},
+  {i:'ST',c:'#D4A843',bg:'#1A0F00',name:'Sékou Touré',metier:'Maçon',ville:'Bouaké',note:4.5,status:'active'},
+];
+const pendData=[
+  {i:'MB',c:'#B5382A',bg:'#2D0A08',name:'Mamadou Bah',meta:'Carreleur · Yopougon'},
+  {i:'RK',c:'#22C55E',bg:'#052010',name:'Rose Konan',meta:'Coiffeuse · Cocody'},
+  {i:'OD',c:'#60A5FA',bg:'#0A1628',name:'Omar Diallo',meta:'Chauffeur · Abobo'},
+  {i:'AK',c:'#A78BFA',bg:'#170A28',name:'Aminata Koné',meta:'Couturière · Treichville'},
+];
+const cityData=[
+  {name:'Abidjan – Yopougon',cnt:312,p:85},{name:'Abidjan – Cocody',cnt:287,p:78},
+  {name:'Abidjan – Abobo',cnt:241,p:65},{name:'Bouaké',cnt:198,p:54},{name:'Yamoussoukro',cnt:143,p:39},
+];
+const feedData=[
+  {icon:'✅',cls:'fi-green',text:'<strong>Koffi K.</strong> a terminé une mission de plomberie',time:'Il y a 5 min'},
+  {icon:'🆕',cls:'fi-brick',text:'<strong>Mariam Traoré</strong> vient de s\'inscrire',time:'Il y a 12 min'},
+  {icon:'💳',cls:'fi-blue',text:'Paiement de <strong>15 000 FCFA</strong> via Wave validé',time:'Il y a 18 min'},
+  {icon:'⭐',cls:'fi-gold',text:'Nouvel avis 5★ pour <strong>Dramane Bamba</strong>',time:'Il y a 34 min'},
+  {icon:'🚨',cls:'fi-red',text:'Signalement reçu sur la mission #1042',time:'Il y a 1h'},
+];
+const donutData=[
+  {label:'Plomberie',val:22,color:'#B5382A'},{label:'Électricité',val:19,color:'#0F1F3D'},
+  {label:'Mécanique',val:16,color:'#22C55E'},{label:'Menuiserie',val:13,color:'#D4A843'},{label:'Autres',val:30,color:'#374151'},
+];
+const weekData=[{d:'Lun',v:42},{d:'Mar',v:67},{d:'Mer',v:55},{d:'Jeu',v:89},{d:'Ven',v:112},{d:'Sam',v:98},{d:'Dim',v:44}];
+const slabels={active:'Actif',pending:'En attente',suspended:'Suspendu'};
+const scls={active:'s-active',pending:'s-pending',suspended:'s-suspended'};
+
+document.getElementById('artisanTable').innerHTML=artData.map(a=>`<tr><td><div class="td-name-wrap"><div class="td-av" style="background:${a.bg};color:${a.c}">${a.i}</div><span>${a.name}</span></div></td><td style="color:var(--muted);font-size:.78rem">${a.metier}</td><td style="color:var(--muted);font-size:.78rem">${a.ville}</td><td><span style="color:var(--gold);font-size:.78rem">★</span> ${a.note}</td><td><span class="bs ${scls[a.status]}">${slabels[a.status]}</span></td><td><button class="act-btn" onclick="toast('Profil : ${a.name}')">Voir</button></td></tr>`).join('');
+
+document.getElementById('pendingList').innerHTML=pendData.map((p,i)=>`<div class="pi" id="pd_${i}"><div class="pi-av" style="background:${p.bg};color:${p.c}">${p.i}</div><div><div class="pi-name">${p.name}</div><div class="pi-meta">${p.meta}</div></div><div class="pi-btns"><button class="p-ok" onclick="document.getElementById('pd_${i}').style.opacity='.3';toast('Approuvé ✓')">✓</button><button class="p-no" onclick="document.getElementById('pd_${i}').remove();toast('Rejeté')">✕</button></div></div>`).join('');
+
+document.getElementById('cityList').innerHTML=cityData.map((c,i)=>`<div class="ci-row"><div class="ci-rank">${i+1}</div><div class="ci-name">${c.name}</div><div class="ci-bar"><div class="ci-fill" style="width:${c.p}%"></div></div><div class="ci-cnt">${c.cnt}</div></div>`).join('');
+
+document.getElementById('actFeed').innerHTML=feedData.map(f=>`<div class="fi"><div class="fi-icon ${f.cls}">${f.icon}</div><div><div class="fi-main">${f.text}</div><div class="fi-time">${f.time}</div></div></div>`).join('');
+
+const maxW=Math.max(...weekData.map(d=>d.v));
+document.getElementById('chartBars').innerHTML=weekData.map((d,i)=>{const h=Math.round((d.v/maxW)*100);const isT=i===4;return`<div class="bar-col"><div class="bar" style="height:${h}px;background:${isT?'var(--brick)':'rgba(181,56,42,0.25)'}" title="${d.v}"></div><div class="bar-label">${d.d}</div></div>`;}).join('');
+
+const svg=document.getElementById('donutSvg');
+const total=donutData.reduce((s,d)=>s+d.val,0);
+const circ=2*Math.PI*38;let offset=0;
+svg.innerHTML='<circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="14"/>'+donutData.map(d=>{const pct=d.val/total;const dash=circ*pct;const gap=circ-dash;const rot=offset*360-90;offset+=pct;return`<circle cx="50" cy="50" r="38" fill="none" stroke="${d.color}" stroke-width="14" stroke-dasharray="${dash.toFixed(2)} ${gap.toFixed(2)}" transform="rotate(${rot} 50 50)" opacity=".9"/>`;}).join('');
+document.getElementById('donutLegend').innerHTML=donutData.map(d=>`<div class="li"><div class="ld" style="background:${d.color}"></div><span style="color:var(--sub)">${d.label}</span><span class="lv">${d.val}%</span></div>`).join('');
+
+function setPage(el,title){if(el){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');}document.getElementById('pageTitle').textContent=title;if(title!=='Vue d\'ensemble')toast('Section "'+title+'" – bientôt disponible');}
+function setTab(el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');toast('Période mise à jour');}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';t.style.transform='translateY(0)';setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(8px)';},2500);}
+</script>
+</body>
+</html>

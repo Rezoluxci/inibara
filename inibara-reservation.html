@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Réservation & Paiement – Inibara.ci</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Lora:ital,wght@0,400;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --brick:#B5382A;--brick-dark:#8C2820;--brick-light:#D4544A;--brick-glow:rgba(181,56,42,0.09);
+      --navy:#0F1F3D;--navy-mid:#162848;--navy-light:#1E3560;
+      --gold:#D4A843;--gold-light:#F0C96A;
+      --green:#22C55E;--red:#F43F5E;--yellow:#FBBF24;
+      --bg:#F5F0E8;--white:#FFFFFF;--dark:#0F0F0F;
+      --card:#FFFFFF;--border:#E5DDD0;--border2:#D4C8B4;
+      --text:#1C1917;--gray:#78716C;--muted:#A8A29E;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+    nav{background:rgba(245,240,232,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:13px 36px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+    .logo{font-family:'Playfair Display',serif;font-weight:800;font-size:1rem;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--dark);}
+    .lm{width:28px;height:28px;background:linear-gradient(135deg,var(--brick),var(--brick-dark));border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.82rem;font-weight:900;color:#fff;}
+    .logo span{color:var(--brick);}
+    .nav-steps{display:flex;align-items:center;gap:0;}
+    .nstep{display:flex;align-items:center;gap:7px;padding:5px 14px;font-size:0.77rem;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s;}
+    .nstep.done{color:var(--green);}
+    .nstep.active{color:var(--brick);border-bottom-color:var(--brick);}
+    .nsn{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;background:rgba(0,0,0,0.06);transition:all .2s;}
+    .nstep.active .nsn{background:var(--brick);color:#fff;}
+    .nstep.done .nsn{background:var(--green);color:#fff;}
+    .ssep{width:20px;height:1px;background:var(--border2);}
+
+    .page{max-width:960px;margin:0 auto;padding:30px 22px 60px;display:grid;grid-template-columns:1fr 348px;gap:24px;align-items:start;}
+    .left{display:flex;flex-direction:column;gap:18px;}
+
+    .card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;}
+    .card-accent{border-top:3px solid var(--brick);}
+    .ch{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:11px;}
+    .csn{width:28px;height:28px;border-radius:50%;background:var(--brick);color:#fff;font-family:'Outfit',sans-serif;font-weight:700;font-size:0.78rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .csn.done{background:var(--green);}
+    .ct{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:var(--navy);}
+    .csub{font-size:0.75rem;color:var(--muted);margin-top:1px;}
+    .cb{padding:22px;}
+
+    .art-recap{display:flex;align-items:center;gap:13px;background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:12px;padding:16px 18px;margin-bottom:18px;}
+    .ar-av{width:48px;height:48px;border-radius:11px;background:rgba(181,56,42,0.2);color:var(--brick-light);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:1.1rem;flex-shrink:0;}
+    .ar-name{font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:800;color:#fff;}
+    .ar-metier{font-size:0.75rem;color:rgba(181,56,42,.7);margin-top:2px;}
+    .ar-meta{display:flex;gap:12px;margin-top:5px;}
+    .ar-meta span{font-size:0.68rem;color:rgba(255,255,255,0.4);}
+    .ar-note{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:var(--gold-light);text-align:right;}
+    .ar-ns{font-size:0.65rem;color:rgba(255,255,255,0.3);margin-top:2px;}
+
+    .services-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px;}
+    .svc-opt{border:2px solid var(--border);border-radius:11px;padding:13px;cursor:pointer;transition:all .2s;position:relative;}
+    .svc-opt:hover{border-color:rgba(181,56,42,0.3);}
+    .svc-opt.sel{border-color:var(--brick);background:var(--brick-glow);}
+    .svc-icon{font-size:1.2rem;margin-bottom:7px;}
+    .svc-name{font-size:0.83rem;font-weight:600;}
+    .svc-desc{font-size:0.7rem;color:var(--muted);margin-top:2px;}
+    .svc-price{font-family:'Playfair Display',serif;font-size:0.87rem;font-weight:800;color:var(--brick);margin-top:5px;}
+    .svc-chk{position:absolute;top:9px;right:9px;width:18px;height:18px;border-radius:50%;background:var(--brick);color:#fff;display:none;align-items:center;justify-content:center;font-size:0.65rem;}
+    .svc-opt.sel .svc-chk{display:flex;}
+
+    .mini-cal{margin-bottom:14px;}
+    .cal-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+    .cal-m{font-family:'Playfair Display',serif;font-size:0.88rem;font-weight:700;color:var(--navy);}
+    .cal-nav{width:26px;height:26px;border-radius:6px;background:var(--bg);border:1.5px solid var(--border2);cursor:pointer;font-size:0.8rem;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+    .cal-nav:hover{border-color:var(--brick);color:var(--brick);}
+    .cal-dh{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px;}
+    .cal-dl{font-size:0.64rem;color:var(--muted);text-align:center;padding:3px 0;font-weight:600;}
+    .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+    .cd{aspect-ratio:1;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:0.77rem;cursor:pointer;transition:all .15s;}
+    .cd:hover:not(.empty):not(.past){background:var(--brick-glow);color:var(--brick);}
+    .cd.past{color:var(--muted);cursor:not-allowed;}
+    .cd.today{font-weight:700;color:var(--brick);}
+    .cd.selected{background:var(--brick);color:#fff!important;}
+    .cd.empty{pointer-events:none;}
+    .time-slots{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px;}
+    .ts{padding:7px 13px;border-radius:7px;border:1.5px solid var(--border2);background:var(--bg);font-size:0.8rem;cursor:pointer;transition:all .18s;}
+    .ts:hover{border-color:rgba(181,56,42,.4);color:var(--brick);}
+    .ts.sel{background:var(--brick);color:#fff;border-color:var(--brick);}
+    .ts.na{opacity:.35;cursor:not-allowed;}
+
+    .fg{margin-bottom:14px;}
+    .fl{display:block;font-size:0.72rem;font-weight:600;color:var(--gray);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;}
+    .fi,.fsel,.fta{width:100%;padding:11px 13px;background:var(--bg);border:1.5px solid var(--border2);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.87rem;outline:none;transition:all .2s;}
+    .fi:focus,.fsel:focus,.fta:focus{border-color:var(--brick);background:#fff;box-shadow:0 0 0 3px rgba(181,56,42,0.07);}
+    .fsel option{background:#fff;}
+    .fta{resize:vertical;min-height:78px;line-height:1.6;}
+    .fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+    .pay-methods{display:flex;flex-direction:column;gap:9px;margin-bottom:18px;}
+    .po{display:flex;align-items:center;gap:12px;border:2px solid var(--border);border-radius:11px;padding:13px 15px;cursor:pointer;transition:all .2s;}
+    .po:hover{border-color:rgba(181,56,42,.3);}
+    .po.sel{border-color:var(--brick);background:var(--brick-glow);}
+    .po-icon{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .po-name{font-size:0.87rem;font-weight:600;}
+    .po-sub{font-size:0.72rem;color:var(--muted);margin-top:1px;}
+    .po-chk{width:20px;height:20px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+    .po.sel .po-chk{background:var(--brick);border-color:var(--brick);color:#fff;font-size:0.65rem;}
+    .sec-strip{display:flex;align-items:center;gap:9px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.18);border-radius:9px;padding:11px 14px;margin-top:14px;}
+    .sec-icon{font-size:1rem;}
+    .sec-text{font-size:0.75rem;color:#4B5563;line-height:1.5;}
+    .sec-text strong{color:var(--text);}
+
+    /* SUMMARY */
+    .summary{position:sticky;top:68px;}
+    .sum-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;}
+    .sum-top{background:linear-gradient(135deg,var(--navy),var(--navy-mid));padding:18px 20px;}
+    .sum-title{font-family:'Playfair Display',serif;font-size:0.87rem;font-weight:800;color:#fff;margin-bottom:12px;}
+    .sum-art{display:flex;align-items:center;gap:9px;}
+    .sum-av{width:36px;height:36px;border-radius:9px;background:rgba(181,56,42,0.2);color:var(--brick-light);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:800;font-size:0.82rem;flex-shrink:0;}
+    .sum-an{font-size:0.85rem;font-weight:600;color:#fff;}
+    .sum-am{font-size:0.7rem;color:rgba(255,255,255,0.45);margin-top:2px;}
+    .sum-body{padding:18px 20px;}
+    .sr{display:flex;align-items:flex-start;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:0.82rem;}
+    .sr:last-of-type{border-bottom:none;}
+    .sr .lbl{color:var(--gray);}
+    .sr .val{font-weight:500;text-align:right;max-width:55%;}
+    .sr .val.hl{color:var(--brick);font-weight:700;}
+    .sum-div{height:1px;background:var(--border);margin:3px 0;}
+    .sum-total{display:flex;align-items:center;justify-content:space-between;padding:12px 0 0;}
+    .stl{font-family:'Playfair Display',serif;font-size:0.85rem;font-weight:700;color:var(--navy);}
+    .stv{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:800;color:var(--brick);}
+    .sts{font-size:0.68rem;color:var(--muted);margin-top:1px;text-align:right;}
+    .sum-g{padding:0 20px 14px;display:flex;flex-direction:column;gap:6px;}
+    .sgi{display:flex;align-items:center;gap:7px;font-size:0.73rem;color:#4B5563;}
+    .btn-reserve{margin:0 20px 18px;width:calc(100% - 40px);padding:14px;background:var(--brick);color:#fff;border:none;border-radius:10px;cursor:pointer;font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;transition:all .22s;display:flex;align-items:center;justify-content:center;gap:8px;}
+    .btn-reserve:hover{background:var(--brick-dark);transform:scale(1.02);}
+
+    /* SUCCESS */
+    .sov{position:fixed;inset:0;z-index:200;background:rgba(15,31,61,0.7);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+    .sov.show{opacity:1;pointer-events:all;}
+    .sm{background:var(--card);border-radius:20px;padding:40px 34px;max-width:420px;width:100%;text-align:center;transform:scale(.92) translateY(18px);transition:transform .32s;box-shadow:0 24px 60px rgba(15,31,61,0.2);}
+    .sov.show .sm{transform:scale(1) translateY(0);}
+    .si{width:68px;height:68px;border-radius:50%;background:rgba(34,197,94,0.1);color:var(--green);font-size:1.9rem;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+    .st{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:7px;}
+    .ss{font-family:'Lora',serif;font-style:italic;color:var(--gray);font-size:0.88rem;line-height:1.7;margin-bottom:22px;}
+    .sd{background:var(--bg);border-radius:10px;padding:14px;text-align:left;margin-bottom:20px;}
+    .sdr{display:flex;justify-content:space-between;font-size:0.8rem;padding:4px 0;border-bottom:1px solid var(--border);}
+    .sdr:last-child{border-bottom:none;}
+    .sdr .lbl{color:var(--gray);}
+    .sdr .val{font-weight:600;}
+    .sref{font-size:0.7rem;color:var(--muted);margin-bottom:18px;}
+    .sref span{color:var(--brick);font-weight:700;}
+    .sbtns{display:flex;flex-direction:column;gap:7px;}
+    .sbtn-m{width:100%;padding:12px;border-radius:9px;border:none;cursor:pointer;font-family:'Playfair Display',serif;font-size:0.88rem;font-weight:800;background:var(--brick);color:#fff;transition:all .2s;}
+    .sbtn-m:hover{background:var(--brick-dark);}
+    .sbtn-g{width:100%;padding:12px;border-radius:9px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:0.85rem;background:none;color:var(--text);border:1.5px solid var(--border2);transition:all .2s;}
+    .sbtn-g:hover{border-color:var(--brick);color:var(--brick);}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    .card{animation:fadeUp .38s ease both;}
+    .card:nth-child(2){animation-delay:.07s;}
+    .card:nth-child(3){animation-delay:.14s;}
+    .card:nth-child(4){animation-delay:.21s;}
+
+    #toast{position:fixed;bottom:22px;right:22px;z-index:999;background:var(--navy);color:#fff;padding:10px 16px;border-radius:8px;font-size:0.8rem;opacity:0;transform:translateY(8px);transition:all .28s;pointer-events:none;border-left:3px solid var(--brick);}
+    @media(max-width:780px){.page{grid-template-columns:1fr;}.summary{position:static;}.nav-steps{display:none;}nav{padding:12px 16px;}}
+    @media(max-width:500px){.services-grid{grid-template-columns:1fr;}.fr{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="#" class="logo"><div class="lm">I</div>Inibara<span>.ci</span></a>
+  <div class="nav-steps">
+    <div class="nstep done"><div class="nsn">✓</div>Artisan choisi</div>
+    <div class="ssep"></div>
+    <div class="nstep active"><div class="nsn">2</div>Réservation</div>
+    <div class="ssep"></div>
+    <div class="nstep"><div class="nsn">3</div>Paiement</div>
+    <div class="ssep"></div>
+    <div class="nstep"><div class="nsn">4</div>Confirmation</div>
+  </div>
+</nav>
+
+<div class="page">
+  <div class="left">
+
+    <!-- STEP 1 -->
+    <div class="card card-accent">
+      <div class="ch"><div class="csn done">✓</div><div><div class="ct">Votre artisan</div><div class="csub">Sélectionné depuis la recherche</div></div></div>
+      <div class="cb">
+        <div class="art-recap">
+          <div class="ar-av">KK</div>
+          <div style="flex:1"><div class="ar-name">Koffi Kouamé</div><div class="ar-metier">🔧 Plombier Professionnel</div><div class="ar-meta"><span>📍 Cocody</span><span>✅ Vérifié Inibara</span><span>🚨 Urgences 24h/24</span></div></div>
+          <div><div class="ar-note">★ 4.9</div><div class="ar-ns">87 avis</div></div>
+        </div>
+        <div style="font-family:'Outfit',sans-serif;font-size:0.72rem;font-weight:600;margin-bottom:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;">Choisissez un service</div>
+        <div class="services-grid" id="sg">
+          <div class="svc-opt sel" onclick="selSvc(this,'Réparation de fuite',5000,'heure')"><div class="svc-icon">🚰</div><div class="svc-name">Réparation de fuite</div><div class="svc-desc">Diagnostic et réparation rapide</div><div class="svc-price">5 000 FCFA/h</div><div class="svc-chk">✓</div></div>
+          <div class="svc-opt" onclick="selSvc(this,'Installation sanitaire',25000,'forfait')"><div class="svc-icon">🏗️</div><div class="svc-name">Installation sanitaire</div><div class="svc-desc">WC, lavabo, douche, baignoire</div><div class="svc-price">25 000 FCFA</div><div class="svc-chk">✓</div></div>
+          <div class="svc-opt" onclick="selSvc(this,'Débouchage canalisation',8000,'forfait')"><div class="svc-icon">🔩</div><div class="svc-name">Débouchage</div><div class="svc-desc">Évier, douche, WC bouché</div><div class="svc-price">8 000 FCFA</div><div class="svc-chk">✓</div></div>
+          <div class="svc-opt" onclick="selSvc(this,'Urgence 24h/24',15000,'intervention')"><div class="svc-icon">🚨</div><div class="svc-name">Urgence 24h/24</div><div class="svc-desc">Intervention en moins d'1h</div><div class="svc-price">15 000 FCFA</div><div class="svc-chk">✓</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="card">
+      <div class="ch"><div class="csn">2</div><div><div class="ct">Date & Heure</div><div class="csub">Choisissez votre créneau</div></div></div>
+      <div class="cb">
+        <div class="mini-cal">
+          <div class="cal-h"><button class="cal-nav" onclick="prevM()">←</button><div class="cal-m" id="cm">Mai 2026</div><button class="cal-nav" onclick="nextM()">→</button></div>
+          <div class="cal-dh"><div class="cal-dl">Lun</div><div class="cal-dl">Mar</div><div class="cal-dl">Mer</div><div class="cal-dl">Jeu</div><div class="cal-dl">Ven</div><div class="cal-dl">Sam</div><div class="cal-dl">Dim</div></div>
+          <div class="cal-days" id="cd"></div>
+        </div>
+        <div class="fl">Créneaux disponibles</div>
+        <div class="time-slots">
+          <div class="ts na">07:00</div><div class="ts na">08:00</div>
+          <div class="ts" onclick="selSlot(this)">09:00</div>
+          <div class="ts sel" onclick="selSlot(this)">10:00</div>
+          <div class="ts" onclick="selSlot(this)">11:00</div>
+          <div class="ts na">12:00</div>
+          <div class="ts" onclick="selSlot(this)">14:00</div>
+          <div class="ts" onclick="selSlot(this)">15:00</div>
+          <div class="ts" onclick="selSlot(this)">16:00</div>
+          <div class="ts na">17:00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="card">
+      <div class="ch"><div class="csn">3</div><div><div class="ct">Votre adresse</div><div class="csub">Où doit intervenir l'artisan ?</div></div></div>
+      <div class="cb">
+        <div class="fg"><label class="fl">Ville / Quartier</label><select class="fsel" onchange="updateSum()"><option>Cocody – Riviera 2</option><option>Cocody – Angré</option><option>Cocody – 2 Plateaux</option><option>Yopougon</option><option>Abobo</option><option>Marcory</option><option>Plateau</option></select></div>
+        <div class="fg"><label class="fl">Adresse précise</label><input class="fi" type="text" placeholder="Ex: Résidence Les Bougainvillées, Apt 4B" oninput="updateSum()"/></div>
+        <div class="fg"><label class="fl">Description du problème</label><textarea class="fta" placeholder="Décrivez votre problème pour aider l'artisan à préparer son intervention…"></textarea></div>
+        <div class="fg"><label class="fl">Téléphone de contact</label><input class="fi" type="tel" placeholder="+225 07 00 00 00 00"/></div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="card">
+      <div class="ch"><div class="csn">4</div><div><div class="ct">Moyen de paiement</div><div class="csub">Sécurisé — versé après le travail</div></div></div>
+      <div class="cb">
+        <div class="pay-methods">
+          <div class="po sel" onclick="selPay(this,'wave','🔵 Wave','Wave')"><div class="po-icon" style="background:#EFF6FF">🔵</div><div class="po-info"><div class="po-name">Wave</div><div class="po-sub">Paiement instantané · 0% de frais</div></div><div class="po-chk">✓</div></div>
+          <div class="po" onclick="selPay(this,'orange','🟠 Orange Money','Orange Money')"><div class="po-icon" style="background:#FFF7ED">🟠</div><div class="po-info"><div class="po-name">Orange Money</div><div class="po-sub">Transfert sécurisé Orange CI</div></div><div class="po-chk"></div></div>
+          <div class="po" onclick="selPay(this,'mtn','🟡 MTN MoMo','MTN MoMo')"><div class="po-icon" style="background:#FFFBEB">🟡</div><div class="po-info"><div class="po-name">MTN Mobile Money</div><div class="po-sub">Paiement via MTN MoMo CI</div></div><div class="po-chk"></div></div>
+        </div>
+        <div class="fg"><label class="fl">Numéro <span id="pml">Wave</span></label><input class="fi" type="tel" placeholder="+225 07 00 00 00 00"/></div>
+        <div class="sec-strip"><span class="sec-icon">🔒</span><div class="sec-text"><strong>Paiement 100% sécurisé par Inibara.</strong> Votre argent est bloqué sur notre compte et versé à l'artisan uniquement après que vous ayez validé la prestation. En cas de problème, Inibara vous rembourse intégralement.</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary">
+    <div class="sum-card">
+      <div class="sum-top">
+        <div class="sum-title">Récapitulatif Inibara</div>
+        <div class="sum-art"><div class="sum-av">KK</div><div><div class="sum-an">Koffi Kouamé</div><div class="sum-am">🔧 Plombier · Cocody</div></div></div>
+      </div>
+      <div class="sum-body">
+        <div class="sr"><span class="lbl">Service</span><span class="val hl" id="ss">Réparation de fuite</span></div>
+        <div class="sr"><span class="lbl">Date</span><span class="val" id="sd">Demain, 19 mai 2026</span></div>
+        <div class="sr"><span class="lbl">Heure</span><span class="val" id="sh">10:00</span></div>
+        <div class="sr"><span class="lbl">Adresse</span><span class="val" id="sa">Cocody – Riviera 2</span></div>
+        <div class="sr"><span class="lbl">Paiement</span><span class="val" id="sp">🔵 Wave</span></div>
+        <div class="sum-div"></div>
+        <div class="sr"><span class="lbl">Prestation</span><span class="val" id="sp1">5 000 FCFA</span></div>
+        <div class="sr"><span class="lbl">Déplacement</span><span class="val">2 000 FCFA</span></div>
+        <div class="sr"><span class="lbl">Commission Inibara</span><span class="val" id="sc">700 FCFA</span></div>
+        <div class="sum-div"></div>
+        <div class="sum-total">
+          <div><div class="stl">Total à payer</div><div class="sts">Débité après validation</div></div>
+          <div><div class="stv" id="st">7 700 FCFA</div></div>
+        </div>
+      </div>
+      <div class="sum-g">
+        <div class="sgi">🛡️ Argent versé après le travail</div>
+        <div class="sgi">↩️ Remboursement si problème</div>
+        <div class="sgi">✅ Artisan vérifié par Inibara</div>
+        <div class="sgi">📞 Support Inibara 7j/7</div>
+      </div>
+      <button class="btn-reserve" onclick="confirmResa()">🔒 Confirmer & Payer — <span id="bt">7 700 FCFA</span></button>
+    </div>
+    <div style="text-align:center;margin-top:10px;font-size:0.7rem;color:var(--muted);">En confirmant, vous acceptez les <a href="#" style="color:var(--brick)">conditions d'utilisation</a> d'Inibara.</div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="sov" id="sov">
+  <div class="sm">
+    <div class="si">✅</div>
+    <div class="st">Réservation confirmée !</div>
+    <div class="ss">"Votre demande a été envoyée à Koffi Kouamé. Il vous contactera dans les 15 minutes pour confirmer votre rendez-vous."</div>
+    <div class="sd">
+      <div class="sdr"><span class="lbl">Artisan</span><span class="val">Koffi Kouamé</span></div>
+      <div class="sdr"><span class="lbl">Service</span><span class="val" id="cs">Réparation de fuite</span></div>
+      <div class="sdr"><span class="lbl">Date & Heure</span><span class="val">19 mai 2026 · 10h00</span></div>
+      <div class="sdr"><span class="lbl">Montant bloqué</span><span class="val" style="color:var(--brick)" id="ct">7 700 FCFA</span></div>
+      <div class="sdr"><span class="lbl">Paiement</span><span class="val" id="cp">Wave</span></div>
+    </div>
+    <div class="sref">Référence Inibara : <span id="cr">#INB-2026-08734</span></div>
+    <div class="sbtns">
+      <button class="sbtn-m" onclick="closeSov()">Suivre ma mission →</button>
+      <button class="sbtn-g" onclick="closeSov()">Retour à l'accueil</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script>
+let svc={name:'Réparation de fuite',price:5000};
+let payMethod='Wave';
+let selDay=19;
+let cY=2026,cM=4;
+const MONTHS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+function selSvc(el,name,price){
+  document.querySelectorAll('.svc-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');svc={name,price};updateSum();
+}
+function selPay(el,m,label,name){
+  document.querySelectorAll('.po').forEach(o=>{o.classList.remove('sel');o.querySelector('.po-chk').textContent='';});
+  el.classList.add('sel');el.querySelector('.po-chk').textContent='✓';
+  payMethod=name;document.getElementById('pml').textContent=name;document.getElementById('sp').textContent=label;document.getElementById('cp').textContent=name;
+}
+function selSlot(el){
+  if(el.classList.contains('na'))return;
+  document.querySelectorAll('.ts').forEach(s=>s.classList.remove('sel'));
+  el.classList.add('sel');document.getElementById('sh').textContent=el.textContent;
+}
+function renderCal(){
+  document.getElementById('cm').textContent=MONTHS[cM]+' '+cY;
+  const first=(new Date(cY,cM,1).getDay()+6)%7;
+  const dim=new Date(cY,cM+1,0).getDate();
+  let h='';
+  for(let i=0;i<first;i++)h+=`<div class="cd empty"></div>`;
+  for(let d=1;d<=dim;d++){
+    const isPast=(cY===2026&&cM===4&&d<18);
+    const isToday=(cY===2026&&cM===4&&d===18);
+    const isSel=d===selDay&&cM===4&&cY===2026;
+    let cls='cd';
+    if(isPast)cls+=' past';
+    if(isToday)cls+=' today';
+    if(isSel)cls+=' selected';
+    h+=`<div class="${cls}" onclick="selD(${d})">${d}</div>`;
+  }
+  document.getElementById('cd').innerHTML=h;
+}
+function selD(d){
+  selDay=d;
+  const dn=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+  const dt=new Date(cY,cM,d);
+  const isT=(cY===2026&&cM===4&&d===18);
+  document.getElementById('sd').textContent=(isT?'Aujourd\'hui':dn[dt.getDay()]+' '+d+' '+MONTHS[cM].toLowerCase())+' '+cY;
+  renderCal();
+}
+function prevM(){if(cM>0)cM--;else{cM=11;cY--;}renderCal();}
+function nextM(){if(cM<11)cM++;else{cM=0;cY++;}renderCal();}
+
+function updateSum(){
+  const comm=Math.round(svc.price*0.1);
+  const total=svc.price+2000+comm;
+  document.getElementById('ss').textContent=svc.name;
+  document.getElementById('sp1').textContent=svc.price.toLocaleString()+' FCFA';
+  document.getElementById('sc').textContent=comm.toLocaleString()+' FCFA';
+  document.getElementById('st').textContent=total.toLocaleString()+' FCFA';
+  document.getElementById('bt').textContent=total.toLocaleString()+' FCFA';
+  document.getElementById('ct').textContent=total.toLocaleString()+' FCFA';
+  document.getElementById('cs').textContent=svc.name;
+}
+function confirmResa(){
+  updateSum();
+  document.getElementById('cr').textContent='#INB-2026-'+Math.floor(10000+Math.random()*90000);
+  document.getElementById('sov').classList.add('show');
+}
+function closeSov(){document.getElementById('sov').classList.remove('show');}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';t.style.transform='translateY(0)';setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(8px)';},2800);}
+
+renderCal();updateSum();
+</script>
+</body>
+</html>

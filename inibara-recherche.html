@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recherche – Inibara.ci</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --brick:#B5382A;--brick-dark:#8C2820;--brick-light:#D4544A;--brick-glow:rgba(181,56,42,0.09);
+      --navy:#0F1F3D;--navy-mid:#162848;--navy-light:#1E3560;
+      --gold:#D4A843;--green:#22C55E;--red:#F43F5E;--yellow:#FBBF24;
+      --bg:#F5F0E8;--white:#FFFFFF;--dark:#0F0F0F;
+      --card:#FFFFFF;--border:#E5DDD0;--border2:#D4C8B4;
+      --text:#1C1917;--gray:#78716C;--muted:#A8A29E;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+    /* NAV */
+    nav{position:sticky;top:0;z-index:100;background:rgba(245,240,232,0.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:12px 28px;display:flex;align-items:center;gap:14px;}
+    .logo{font-family:'Playfair Display',serif;font-weight:800;font-size:1rem;color:var(--dark);text-decoration:none;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+    .lm{width:28px;height:28px;background:linear-gradient(135deg,var(--brick),var(--brick-dark));border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.82rem;font-weight:900;color:#fff;}
+    .logo span{color:var(--brick);}
+
+    /* SEARCH BAR */
+    .nav-search{flex:1;max-width:660px;display:flex;background:var(--white);border:2px solid var(--border2);border-radius:6px;overflow:hidden;transition:border-color .2s,box-shadow .2s;}
+    .nav-search:focus-within{border-color:var(--brick);box-shadow:0 0 0 3px rgba(181,56,42,0.08);}
+    .nsf{flex:1;display:flex;align-items:center;gap:8px;padding:10px 14px;border-right:1px solid var(--border);}
+    .nsf:last-of-type{border-right:none;}
+    .nsfi{font-size:.9rem;opacity:.45;flex-shrink:0;}
+    .nsf input,.nsf select{background:none;border:none;outline:none;font-family:'Outfit',sans-serif;font-size:0.86rem;color:var(--text);width:100%;}
+    .nsf input::placeholder{color:var(--muted);}
+    .nsf select option{background:#fff;}
+    .nsbtn{background:var(--brick);color:#fff;border:none;padding:10px 20px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:0.84rem;font-weight:600;transition:background .2s;white-space:nowrap;}
+    .nsbtn:hover{background:var(--brick-dark);}
+    .nav-right{margin-left:auto;display:flex;gap:8px;flex-shrink:0;}
+    .nbtn{padding:8px 14px;border-radius:5px;border:1.5px solid var(--border2);background:none;cursor:pointer;font-size:0.8rem;transition:all .2s;color:var(--text);}
+    .nbtn:hover{border-color:var(--brick);color:var(--brick);}
+    .nbtn.p{background:var(--navy);color:#fff;border-color:var(--navy);}
+    .nbtn.p:hover{background:var(--brick);border-color:var(--brick);}
+
+    /* LAYOUT */
+    .page{display:flex;min-height:calc(100vh - 55px);}
+
+    /* FILTERS */
+    .filters{width:252px;min-width:252px;padding:22px 18px;border-right:1px solid var(--border);background:var(--white);position:sticky;top:55px;height:calc(100vh - 55px);overflow-y:auto;}
+    .fh{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;color:var(--navy);}
+    .freset{font-size:0.72rem;color:var(--brick);cursor:pointer;font-weight:400;font-family:'Outfit',sans-serif;}
+    .fg{margin-bottom:20px;}
+    .fgl{font-size:0.65rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:9px;font-weight:600;}
+    .fgo{display:flex;flex-direction:column;gap:5px;}
+    .fopt{display:flex;align-items:center;gap:8px;padding:8px 11px;border-radius:7px;cursor:pointer;transition:all .18s;border:1.5px solid transparent;font-size:0.82rem;}
+    .fopt:hover{background:var(--bg);}
+    .fopt.sel{background:var(--brick-glow);border-color:rgba(181,56,42,0.2);color:var(--brick);}
+    .fck{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.6rem;transition:all .15s;}
+    .fopt.sel .fck{background:var(--brick);border-color:var(--brick);color:#fff;}
+    .fcnt{margin-left:auto;font-size:0.7rem;color:var(--muted);}
+    .fopt.sel .fcnt{color:var(--brick);}
+    .range-wrap{padding:3px 1px;}
+    .range-lbls{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:5px;}
+    input[type=range]{width:100%;accent-color:var(--brick);cursor:pointer;}
+    .range-val{font-size:0.8rem;font-weight:600;color:var(--brick);margin-top:3px;}
+    .star-row{display:flex;gap:5px;}
+    .sbtn{padding:6px 10px;border-radius:6px;border:1.5px solid var(--border);background:none;cursor:pointer;font-size:0.77rem;transition:all .18s;}
+    .sbtn:hover,.sbtn.active{background:var(--brick-glow);border-color:rgba(181,56,42,0.3);color:var(--brick);}
+
+    /* RESULTS */
+    .results{flex:1;padding:18px 22px;}
+    .rh{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:9px;}
+    .rc-title{font-family:'Playfair Display',serif;font-size:1.08rem;font-weight:800;color:var(--navy);}
+    .rc-title span{color:var(--brick);}
+    .rc-sub{font-size:0.77rem;color:var(--gray);margin-top:2px;}
+    .rc-controls{display:flex;align-items:center;gap:9px;}
+    .sort-sel{padding:7px 12px;border-radius:7px;border:1.5px solid var(--border2);background:var(--white);font-family:'Outfit',sans-serif;font-size:0.8rem;color:var(--text);cursor:pointer;outline:none;}
+    .view-toggle{display:flex;background:var(--white);border:1.5px solid var(--border2);border-radius:7px;overflow:hidden;}
+    .vbtn{width:32px;height:32px;border:none;background:none;cursor:pointer;font-size:.9rem;transition:background .15s;display:flex;align-items:center;justify-content:center;}
+    .vbtn.active{background:var(--brick);color:#fff;}
+
+    .qf-row{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap;}
+    .qf{padding:6px 12px;border-radius:50px;border:1.5px solid var(--border2);background:var(--white);font-size:0.77rem;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:4px;}
+    .qf:hover{border-color:rgba(181,56,42,0.3);color:var(--brick);}
+    .qf.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+    .map-bar{background:var(--navy);color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-radius:10px;margin-bottom:16px;}
+    .map-bar p{font-size:0.78rem;color:rgba(255,255,255,0.5);margin-top:2px;}
+    .map-btn{background:var(--brick);color:#fff;border:none;padding:8px 18px;border-radius:5px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:background .2s;}
+    .map-btn:hover{background:var(--brick-dark);}
+
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:15px;}
+    .cards-grid.lv{grid-template-columns:1fr;}
+
+    /* CARD */
+    .acard{background:var(--white);border:1.5px solid var(--border);border-radius:11px;overflow:hidden;transition:all .22s;cursor:pointer;}
+    .acard:hover{border-color:rgba(181,56,42,0.3);transform:translateY(-4px);box-shadow:0 12px 30px rgba(15,31,61,0.1);}
+    .ac-banner{height:4px;background:linear-gradient(90deg,var(--navy),var(--brick));}
+    .ac-top{padding:16px 16px 10px;display:flex;gap:12px;align-items:flex-start;}
+    .ac-av{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;flex-shrink:0;}
+    .ac-name{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .ac-metier{font-size:0.75rem;color:var(--brick);font-weight:600;margin-top:2px;}
+    .ac-loc{font-size:0.7rem;color:var(--gray);margin-top:3px;display:flex;align-items:center;gap:3px;}
+    .ac-badges{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;}
+    .bv{display:flex;align-items:center;gap:3px;background:#F0FDF4;color:#166534;border:1px solid #BBF7D0;padding:2px 7px;border-radius:50px;font-size:0.65rem;font-weight:600;}
+    .bt{background:#FFF7ED;color:var(--brick);border:1px solid var(--brick-light);padding:2px 7px;border-radius:50px;font-size:0.65rem;font-weight:600;}
+    .ba{display:flex;align-items:center;gap:4px;font-size:0.67rem;}
+    .ad{width:5px;height:5px;border-radius:50%;}
+    .ac-skills{padding:0 16px 11px;display:flex;gap:5px;flex-wrap:wrap;}
+    .sp{background:rgba(15,31,61,0.06);color:var(--navy);border:1px solid rgba(15,31,61,0.1);padding:3px 9px;border-radius:4px;font-size:0.68rem;font-weight:500;}
+    .ac-mid{padding:10px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .ac-rating{display:flex;align-items:center;gap:5px;}
+    .ars{color:var(--gold);font-size:0.78rem;}
+    .arv{font-size:0.85rem;font-weight:700;color:var(--navy);}
+    .arc{font-size:0.7rem;color:var(--muted);}
+    .amc{font-size:0.7rem;color:var(--gray);}
+    .ac-foot{padding:11px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .ac-price{font-family:'Playfair Display',serif;font-size:0.97rem;font-weight:800;color:var(--navy);}
+    .ac-price span{font-size:0.68rem;font-family:'Outfit',sans-serif;font-weight:400;color:var(--muted);}
+    .ac-btns{display:flex;gap:6px;}
+    .btn-c{background:var(--brick);color:#fff;border:none;padding:7px 15px;border-radius:5px;font-size:0.77rem;font-weight:600;cursor:pointer;transition:background .2s;}
+    .btn-c:hover{background:var(--brick-dark);}
+    .btn-s{width:32px;height:32px;border-radius:50%;background:none;border:1.5px solid var(--border2);cursor:pointer;font-size:0.85rem;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+    .btn-s:hover,.btn-s.saved{background:var(--brick-glow);border-color:rgba(181,56,42,0.3);}
+
+    /* LIST VIEW */
+    .cards-grid.lv .acard{display:flex;align-items:center;}
+    .cards-grid.lv .ac-top{flex:1;}
+    .cards-grid.lv .ac-skills{padding:0 16px 0 0;border:none;}
+    .cards-grid.lv .ac-mid{border-top:none;border-left:1px solid var(--border);padding:16px;}
+    .cards-grid.lv .ac-foot{border-top:none;border-left:1px solid var(--border);padding:16px;}
+
+    /* NO RESULTS */
+    .no-res{text-align:center;padding:50px 20px;grid-column:1/-1;}
+    .no-res-icon{font-size:2.8rem;margin-bottom:12px;}
+    .no-res h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:7px;}
+    .no-res p{color:var(--gray);font-size:0.85rem;}
+
+    /* PAGINATION */
+    .pagination{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:26px;padding-bottom:18px;}
+    .pb{width:34px;height:34px;border-radius:7px;border:1.5px solid var(--border2);background:var(--white);cursor:pointer;font-size:0.82rem;font-weight:500;transition:all .18s;display:flex;align-items:center;justify-content:center;}
+    .pb:hover{border-color:var(--brick);color:var(--brick);}
+    .pb.active{background:var(--brick);border-color:var(--brick);color:#fff;}
+
+    #toast{position:fixed;bottom:20px;right:20px;z-index:999;background:var(--navy);color:#fff;padding:10px 16px;border-radius:7px;font-size:0.8rem;opacity:0;transform:translateY(8px);transition:all .28s;pointer-events:none;border-left:3px solid var(--brick);}
+    ::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(181,56,42,0.2);border-radius:2px;}
+    @media(max-width:900px){.filters{display:none;}.nav-right{display:none;}}
+    @media(max-width:600px){nav{padding:10px 14px;}.nsf:nth-child(2){display:none;}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="#" class="logo"><div class="lm">I</div>Inibara<span>.ci</span></a>
+  <div class="nav-search">
+    <div class="nsf"><span class="nsfi">🔍</span><input type="text" id="si" placeholder="Plombier, électricien, mécanicien…" oninput="doSearch()"/></div>
+    <div class="nsf"><span class="nsfi">📍</span><select id="vs" onchange="doSearch()"><option value="">Toutes les villes</option><option>Cocody</option><option>Yopougon</option><option>Abobo</option><option>Marcory</option><option>Plateau</option><option>Bouaké</option><option>Daloa</option><option>Yamoussoukro</option></select></div>
+    <button class="nsbtn" onclick="doSearch()">Rechercher</button>
+  </div>
+  <div class="nav-right">
+    <button class="nbtn" onclick="toast('Connexion…')">Se connecter</button>
+    <button class="nbtn p" onclick="toast('Inscription…')">S'inscrire</button>
+  </div>
+</nav>
+
+<div class="page">
+  <aside class="filters">
+    <div class="fh">Filtres <span class="freset" onclick="resetFilters()">Réinitialiser</span></div>
+    <div class="fg">
+      <div class="fgl">Disponibilité</div>
+      <div class="fgo">
+        <div class="fopt sel" onclick="tF(this)"><div class="fck">✓</div>Tous<span class="fcnt">48</span></div>
+        <div class="fopt" onclick="tF(this)"><div class="fck"></div>Disponible maintenant<span class="fcnt">31</span></div>
+        <div class="fopt" onclick="tF(this)"><div class="fck"></div>Urgences 24h/24<span class="fcnt">18</span></div>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fgl">Note minimum</div>
+      <div class="star-row">
+        <button class="sbtn" onclick="setStar(this,0)">Tous</button>
+        <button class="sbtn active" onclick="setStar(this,4)">4★+</button>
+        <button class="sbtn" onclick="setStar(this,4.5)">4.5★+</button>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fgl">Tarif max (FCFA/h)</div>
+      <div class="range-wrap">
+        <div class="range-lbls"><span>1 000</span><span>50 000</span></div>
+        <input type="range" min="1000" max="50000" value="25000" step="500" id="pr" oninput="document.getElementById('rv').textContent='≤ '+parseInt(this.value).toLocaleString()+' FCFA/h'"/>
+        <div class="range-val" id="rv">≤ 25 000 FCFA/h</div>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fgl">Métier</div>
+      <div class="fgo" id="mf">
+        <div class="fopt sel" onclick="fMet(this,'')"><div class="fck">✓</div>Tous les métiers<span class="fcnt">48</span></div>
+        <div class="fopt" onclick="fMet(this,'Plombier')"><div class="fck"></div>🚰 Plombier<span class="fcnt">8</span></div>
+        <div class="fopt" onclick="fMet(this,'Électricien')"><div class="fck"></div>⚡ Électricien<span class="fcnt">11</span></div>
+        <div class="fopt" onclick="fMet(this,'Mécanicien')"><div class="fck"></div>🔧 Mécanicien<span class="fcnt">9</span></div>
+        <div class="fopt" onclick="fMet(this,'Menuisier')"><div class="fck"></div>🪵 Menuisier<span class="fcnt">6</span></div>
+        <div class="fopt" onclick="fMet(this,'Maçon')"><div class="fck"></div>🧱 Maçon<span class="fcnt">7</span></div>
+        <div class="fopt" onclick="fMet(this,'Peintre')"><div class="fck"></div>🎨 Peintre<span class="fcnt">4</span></div>
+        <div class="fopt" onclick="fMet(this,'Chauffeur')"><div class="fck"></div>🚗 Chauffeur<span class="fcnt">5</span></div>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fgl">Profil</div>
+      <div class="fgo">
+        <div class="fopt" onclick="tF(this)"><div class="fck"></div>✅ Vérifiés uniquement<span class="fcnt">39</span></div>
+        <div class="fopt" onclick="tF(this)"><div class="fck"></div>🏆 Top artisans<span class="fcnt">12</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="results">
+    <div class="rh">
+      <div>
+        <div class="rc-title">Résultats pour <span id="sl">"Plombier"</span> à <span id="vl">Abidjan</span></div>
+        <div class="rc-sub" id="rc">48 artisans trouvés · Triés par pertinence</div>
+      </div>
+      <div class="rc-controls">
+        <select class="sort-sel"><option>Pertinence</option><option>Meilleure note</option><option>Tarif croissant</option><option>Tarif décroissant</option></select>
+        <div class="view-toggle">
+          <button class="vbtn active" id="gb" onclick="setView('grid')" title="Grille">⊞</button>
+          <button class="vbtn" id="lb" onclick="setView('list')" title="Liste">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="qf-row">
+      <div class="qf active" onclick="this.classList.toggle('active')">🟢 Disponible maintenant</div>
+      <div class="qf" onclick="this.classList.toggle('active')">⭐ 4.5+ étoiles</div>
+      <div class="qf" onclick="this.classList.toggle('active')">✅ Vérifié Inibara</div>
+      <div class="qf" onclick="this.classList.toggle('active')">🚨 Urgences</div>
+      <div class="qf" onclick="this.classList.toggle('active')">💸 Moins de 10 000 FCFA</div>
+    </div>
+
+    <div class="map-bar">
+      <div><strong>Voir sur la carte</strong><p>Localisez les artisans autour de vous</p></div>
+      <button class="map-btn" onclick="toast('Carte interactive – bientôt disponible 🗺️')">🗺️ Afficher la carte</button>
+    </div>
+
+    <div class="cards-grid" id="cg"></div>
+
+    <div class="pagination">
+      <button class="pb">←</button>
+      <button class="pb active">1</button>
+      <button class="pb">2</button>
+      <button class="pb">3</button>
+      <button class="pb">…</button>
+      <button class="pb">8</button>
+      <button class="pb">→</button>
+    </div>
+  </main>
+</div>
+<div id="toast"></div>
+<script>
+const DATA=[
+  {id:1,i:'KK',c:'#B5382A',bg:'#FFF0EE',name:'Koffi Kouamé',metier:'Plombier',ville:'Cocody',note:4.9,avis:87,tarif:5000,missions:534,dispo:true,top:true,verified:true,urgent:true,skills:['Fuite d\'eau','Canalisation','Sanitaire']},
+  {id:2,i:'DB',c:'#0F1F3D',bg:'#EEF2FF',name:'Dramane Bamba',metier:'Électricien',ville:'Yopougon',note:4.7,avis:64,tarif:7500,missions:312,dispo:true,top:false,verified:true,urgent:false,skills:['Installation','Dépannage','Tableau']},
+  {id:3,i:'AN',c:'#166534',bg:'#F0FDF4',name:'Awa N\'Goran',metier:'Menuisière',ville:'Marcory',note:4.8,avis:43,tarif:10000,missions:198,dispo:false,top:true,verified:true,urgent:false,skills:['Meubles','Portes','Parquet']},
+  {id:4,i:'IC',c:'#5B21B6',bg:'#F5F3FF',name:'Issa Coulibaly',metier:'Mécanicien',ville:'Abobo',note:4.6,avis:112,tarif:8000,missions:445,dispo:true,top:false,verified:true,urgent:true,skills:['Auto','Moto','Diagnostic']},
+  {id:5,i:'FD',c:'#9D174D',bg:'#FDF2F8',name:'Fatou Diallo',metier:'Peintre',ville:'Plateau',note:5.0,avis:28,tarif:6000,missions:87,dispo:true,top:true,verified:true,urgent:false,skills:['Intérieur','Extérieur','Déco']},
+  {id:6,i:'ST',c:'#92400E',bg:'#FFFBEB',name:'Sékou Touré',metier:'Maçon',ville:'Bouaké',note:4.5,avis:76,tarif:12000,missions:267,dispo:true,top:false,verified:false,urgent:false,skills:['Carrelage','Béton','Rénovation']},
+  {id:7,i:'MO',c:'#065F46',bg:'#ECFDF5',name:'Mamadou Ouattara',metier:'Électricien',ville:'Cocody',note:4.8,avis:55,tarif:9000,missions:178,dispo:false,top:false,verified:true,urgent:true,skills:['Climatisation','Câblage','Domotique']},
+  {id:8,i:'RK',c:'#B5382A',bg:'#FFF0EE',name:'Rose Konan',metier:'Coiffeuse',ville:'Yopougon',note:4.9,avis:134,tarif:3000,missions:620,dispo:true,top:true,verified:true,urgent:false,skills:['Tresses','Tissage','Soins']},
+  {id:9,i:'AB',c:'#1E3A5F',bg:'#EFF6FF',name:'Amadou Bah',metier:'Chauffeur',ville:'Plateau',note:4.6,avis:89,tarif:15000,missions:890,dispo:true,top:false,verified:true,urgent:true,skills:['VTC','Longue distance','Aéroport']},
+  {id:10,i:'NK',c:'#4C1D95',bg:'#EDE9FE',name:'Nadège Koffi',metier:'Couturière',ville:'Marcory',note:4.7,avis:61,tarif:5000,missions:143,dispo:true,top:false,verified:true,urgent:false,skills:['Sur mesure','Broderie','Retouches']},
+  {id:11,i:'YT',c:'#7F1D1D',bg:'#FEF2F2',name:'Youssouf Traoré',metier:'Plombier',ville:'Abobo',note:4.4,avis:38,tarif:4500,missions:112,dispo:false,top:false,verified:false,urgent:true,skills:['Fosse septique','Canalisation','Pompe']},
+  {id:12,i:'BS',c:'#0F766E',bg:'#F0FDFA',name:'Bintou Sanogo',metier:'Esthéticienne',ville:'Cocody',note:4.9,avis:97,tarif:8000,missions:234,dispo:true,top:true,verified:true,urgent:false,skills:['Manucure','Soin visage','Épilation']},
+];
+let curMet='';
+const saved=new Set();
+
+function renderCards(data){
+  const g=document.getElementById('cg');
+  if(!data.length){g.innerHTML=`<div class="no-res"><div class="no-res-icon">🔍</div><h3>Aucun artisan trouvé</h3><p>Essayez avec d'autres mots-clés.</p></div>`;return;}
+  g.innerHTML=data.map((a,i)=>`
+    <div class="acard" style="animation:fadeUp .35s ${i*.05}s ease both" onclick="toast('Profil de ${a.name}…')">
+      <div class="ac-banner"></div>
+      <div class="ac-top">
+        <div class="ac-av" style="background:${a.bg};color:${a.c}">${a.i}</div>
+        <div style="flex:1;min-width:0">
+          <div class="ac-name">${a.name}</div>
+          <div class="ac-metier">${a.metier}</div>
+          <div class="ac-loc">📍 ${a.ville}, Côte d'Ivoire</div>
+          <div class="ac-badges">
+            ${a.verified?'<span class="bv">✅ Vérifié</span>':''}
+            ${a.top?'<span class="bt">🏆 Top</span>':''}
+            <span class="ba"><div class="ad" style="background:${a.dispo?'#22C55E':'#F43F5E'}"></div><span style="font-size:.67rem;color:${a.dispo?'#16A34A':'#9CA3AF'}">${a.dispo?'Disponible':'Occupé'}</span></span>
+          </div>
+        </div>
+      </div>
+      <div class="ac-skills">${a.skills.map(s=>`<span class="sp">${s}</span>`).join('')}${a.urgent?'<span class="sp" style="background:rgba(181,56,42,0.07);color:var(--brick);border-color:rgba(181,56,42,0.15)">🚨 Urgences</span>':''}</div>
+      <div class="ac-mid">
+        <div class="ac-rating"><span class="ars">★★★★★</span><span class="arv">${a.note}</span><span class="arc">(${a.avis} avis)</span></div>
+        <div class="amc">📋 ${a.missions} missions</div>
+      </div>
+      <div class="ac-foot">
+        <div><span class="ac-price">${a.tarif.toLocaleString()} FCFA</span> <span class="ac-price span">/ heure</span></div>
+        <div class="ac-btns">
+          <button class="btn-s ${saved.has(a.id)?'saved':''}" onclick="event.stopPropagation();toggleSave(this,${a.id})">${saved.has(a.id)?'❤️':'🤍'}</button>
+          <button class="btn-c" onclick="event.stopPropagation();toast('Contacter ${a.name}…')">Contacter</button>
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById('rc').textContent=`${data.length} artisan${data.length>1?'s':''} trouvé${data.length>1?'s':''}`;
+}
+
+function doSearch(){
+  const q=document.getElementById('si').value.toLowerCase();
+  const v=document.getElementById('vs').value;
+  document.getElementById('sl').textContent=q?`"${q}"`:'tous les métiers';
+  document.getElementById('vl').textContent=v||'Côte d\'Ivoire';
+  renderCards(DATA.filter(a=>{
+    const mq=!q||(a.metier.toLowerCase().includes(q)||a.name.toLowerCase().includes(q)||a.skills.some(s=>s.toLowerCase().includes(q)));
+    const mv=!v||a.ville===v;
+    const mm=!curMet||a.metier===curMet;
+    return mq&&mv&&mm;
+  }));
+}
+
+function fMet(el,m){curMet=m;document.querySelectorAll('#mf .fopt').forEach(o=>{o.classList.remove('sel');o.querySelector('.fck').textContent='';});el.classList.add('sel');el.querySelector('.fck').textContent='✓';doSearch();}
+function tF(el){const sib=el.closest('.fgo').querySelectorAll('.fopt');sib.forEach(s=>{s.classList.remove('sel');s.querySelector('.fck').textContent='';});el.classList.add('sel');el.querySelector('.fck').textContent='✓';toast('Filtre appliqué');}
+function setStar(el,v){document.querySelectorAll('.sbtn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderCards(v===0?DATA:DATA.filter(a=>a.note>=v));}
+function resetFilters(){curMet='';document.getElementById('si').value='';document.getElementById('vs').value='';renderCards(DATA);toast('Filtres réinitialisés');}
+function setView(v){const g=document.getElementById('cg');g.classList.toggle('lv',v==='list');document.getElementById('gb').classList.toggle('active',v==='grid');document.getElementById('lb').classList.toggle('active',v==='list');}
+function toggleSave(btn,id){if(saved.has(id)){saved.delete(id);btn.textContent='🤍';btn.classList.remove('saved');toast('Retiré des favoris');}else{saved.add(id);btn.textContent='❤️';btn.classList.add('saved');toast('Ajouté aux favoris ❤️');}}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';t.style.transform='translateY(0)';setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(8px)';},2500);}
+
+document.getElementById('si').value='Plombier';
+doSearch();
+const style=document.createElement('style');
+style.textContent='@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}';
+document.head.appendChild(style);
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inibara – Test de connexion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --brick:#B5382A;--navy:#0F1F3D;
+      --green:#22C55E;--red:#F43F5E;
+      --bg:#F5F0E8;--white:#FFFFFF;--border:#E5DDD0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+    .card{background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:40px;max-width:520px;width:100%;box-shadow:0 8px 32px rgba(15,31,61,0.08);}
+    .logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;justify-content:center;}
+    .lm{width:36px;height:36px;background:linear-gradient(135deg,#B5382A,#8C2820);border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:1rem;color:#fff;}
+    .lt{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:800;color:var(--navy);}
+    .lt span{color:var(--brick);}
+    h2{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:800;color:var(--navy);margin-bottom:6px;text-align:center;}
+    p{font-size:0.85rem;color:#78716C;text-align:center;margin-bottom:28px;}
+    .form-group{margin-bottom:16px;}
+    label{display:block;font-size:0.75rem;font-weight:600;color:#78716C;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+    input{width:100%;padding:12px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;font-family:'Outfit',sans-serif;font-size:0.88rem;color:#1C1917;outline:none;transition:border-color .2s;}
+    input:focus{border-color:var(--brick);}
+    .btn{width:100%;padding:14px;background:var(--brick);color:#fff;border:none;border-radius:9px;font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;cursor:pointer;transition:background .2s;margin-top:4px;}
+    .btn:hover{background:#8C2820;}
+    .btn:disabled{background:#D4C8B4;cursor:not-allowed;}
+    .result{margin-top:20px;padding:16px;border-radius:9px;font-size:0.85rem;display:none;}
+    .result.success{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);color:#166534;}
+    .result.error{background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);color:#9F1239;}
+    .result-icon{font-size:1.5rem;margin-bottom:8px;display:block;}
+    .result-title{font-weight:700;margin-bottom:4px;}
+    .tables-list{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;}
+    .table-tag{background:rgba(15,31,61,0.07);color:var(--navy);padding:4px 10px;border-radius:4px;font-size:0.75rem;font-weight:600;}
+    .step{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;padding:12px;background:rgba(15,31,61,0.03);border-radius:9px;}
+    .step-num{width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:0.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+    .step-text{font-size:0.83rem;color:#4B5563;line-height:1.5;}
+    .step-text strong{color:var(--navy);}
+    .divider{height:1px;background:var(--border);margin:20px 0;}
+    .loading{display:none;text-align:center;padding:12px;color:#78716C;font-size:0.85rem;}
+    .spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--brick);border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="lm">I</div>
+    <div class="lt">Inibara<span>.ci</span></div>
+  </div>
+
+  <h2>Test de connexion Supabase</h2>
+  <p>Entrez vos clés Supabase pour vérifier que la connexion fonctionne</p>
+
+  <!-- INSTRUCTIONS -->
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-text">Allez sur <strong>supabase.com</strong> → votre projet <strong>inibara</strong> → <strong>Settings</strong> → <strong>API</strong></div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-text">Copiez le <strong>Project URL</strong> (commence par https://)</div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-text">Copiez la clé <strong>anon public</strong> (longue série de lettres)</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FORM -->
+  <div class="form-group">
+    <label>Project URL</label>
+    <input type="text" id="urlInput" placeholder="https://xxxxxx.supabase.co"/>
+  </div>
+  <div class="form-group">
+    <label>Clé anon public</label>
+    <input type="text" id="keyInput" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6..."/>
+  </div>
+
+  <button class="btn" id="testBtn" onclick="testConnection()">
+    🔌 Tester la connexion
+  </button>
+
+  <div class="loading" id="loading">
+    <div class="spinner"></div>Connexion en cours…
+  </div>
+
+  <!-- RESULT -->
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+async function testConnection() {
+  const url = document.getElementById('urlInput').value.trim();
+  const key = document.getElementById('keyInput').value.trim();
+  const btn = document.getElementById('testBtn');
+  const loading = document.getElementById('loading');
+  const result = document.getElementById('result');
+
+  // Validation
+  if (!url || !key) {
+    showResult('error', '⚠️', 'Champs manquants', 'Veuillez remplir le Project URL et la clé anon public.');
+    return;
+  }
+  if (!url.startsWith('https://')) {
+    showResult('error', '⚠️', 'URL incorrecte', 'Le Project URL doit commencer par https://');
+    return;
+  }
+
+  // Loading
+  btn.disabled = true;
+  loading.style.display = 'block';
+  result.style.display = 'none';
+
+  try {
+    // Test : lire les catégories de métiers
+    const cleanUrl = url.replace(/\/$/, '');
+    const response = await fetch(`${cleanUrl}/rest/v1/categories_metiers?select=nom,emoji&order=nom`, {
+      headers: {
+        'apikey': key,
+        'Authorization': `Bearer ${key}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.message || `Erreur ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data && data.length > 0) {
+      // Succès !
+      const tags = data.map(d => `<span class="table-tag">${d.emoji} ${d.nom}</span>`).join('');
+      showResult('success', '✅', 'Connexion réussie !',
+        `Inibara est connecté à Supabase. ${data.length} métiers chargés depuis la base de données :
+        <div class="tables-list">${tags}</div>
+        <br/>
+        <strong>🎉 Votre base de données Inibara fonctionne parfaitement !</strong>
+        <br/><br/>
+        Conservez précieusement ces deux clés — vous en aurez besoin pour chaque page.`
+      );
+
+      // Sauvegarder dans localStorage pour les autres pages
+      localStorage.setItem('inibara_url', cleanUrl);
+      localStorage.setItem('inibara_key', key);
+
+    } else {
+      showResult('error', '⚠️', 'Tables vides', 'La connexion fonctionne mais les tables semblent vides. Vérifiez que le SQL a bien été exécuté.');
+    }
+
+  } catch (error) {
+    showResult('error', '❌', 'Connexion échouée',
+      `Erreur : ${error.message}<br/><br/>
+      Vérifiez que :<br/>
+      • Le Project URL est correct<br/>
+      • La clé anon public est correcte<br/>
+      • Le projet Supabase est actif`
+    );
+  } finally {
+    btn.disabled = false;
+    loading.style.display = 'none';
+  }
+}
+
+function showResult(type, icon, title, message) {
+  const result = document.getElementById('result');
+  result.className = `result ${type}`;
+  result.innerHTML = `
+    <span class="result-icon">${icon}</span>
+    <div class="result-title">${title}</div>
+    <div>${message}</div>
+  `;
+  result.style.display = 'block';
+}
+
+// Pré-remplir si déjà sauvegardé
+window.onload = () => {
+  const savedUrl = localStorage.getItem('inibara_url');
+  const savedKey = localStorage.getItem('inibara_key');
+  if (savedUrl) document.getElementById('urlInput').value = savedUrl;
+  if (savedKey) document.getElementById('keyInput').value = savedKey;
+};
+</script>
+</body>
+</html>
