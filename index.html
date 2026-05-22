@@ -627,9 +627,10 @@
     <li><a href="#metiers">Métiers</a></li>
     <li><a href="#artisans">Artisans</a></li>
     <li><a href="#paiement">Paiement</a></li>
-    <li><a href="#" class="nav-cta" onclick="openModal()">S'inscrire</a></li>
+    <li><a href="inibara-connexion.html" style="color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.88rem;font-weight:500;">Se connecter</a></li><li><a href="inibara-inscription.html" class="nav-cta">S'inscrire</a></li>
   </ul>
 </nav>
+<div id="welcomeBar" style="display:none;background:linear-gradient(90deg,var(--navy),var(--navy-light));color:#fff;padding:10px 48px;font-size:0.85rem;display:flex;align-items:center;justify-content:space-between;"><span id="welcomeMsg">👋 Bonjour !</span><div style="display:flex;gap:12px;"><a href="inibara-recherche.html" style="color:var(--orange-light,#FED7AA);text-decoration:none;font-size:0.82rem;">🔍 Rechercher un artisan</a><a href="#" onclick="seDeconnecter()" style="color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.82rem;">Se déconnecter</a></div></div>
 
 <!-- HERO -->
 <section class="hero">
@@ -862,8 +863,8 @@
     <h2 class="sec-title">Prêt à trouver<br/>le beau travail ?</h2>
     <p class="sec-sub">Inscrivez-vous gratuitement dès maintenant, que vous soyez client ou artisan.</p>
     <div class="cta-btns">
-      <button class="btn-white" onclick="openModal('client')">🙋 Je cherche un artisan</button>
-      <button class="btn-outline" onclick="openModal('artisan')">🔧 Je suis artisan</button>
+      <button class="btn-white" onclick="window.location.href='inibara-inscription.html'">🙋 Je cherche un artisan</button>
+      <button class="btn-outline" onclick="window.location.href='inibara-inscription.html'">🔧 Je suis artisan</button>
     </div>
   </div>
 </section>
@@ -949,7 +950,7 @@ function renderCards(data){
       </div>
       <div class="acard-foot">
         <div class="acard-price">${a.tarif} FCFA <span>/ heure</span></div>
-        <button class="btn-contact" onclick="openModal()">Contacter</button>
+        <button class="btn-contact" onclick="window.location.href='inibara-inscription.html'">Contacter</button>
       </div>
     </div>`).join('');
 }
@@ -979,6 +980,37 @@ function toast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg;t.style.opacity='1';t.style.transform='translateY(0)';
   setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(10px)';},2800);
+}
+</script>
+<script>
+// Vérifier si l'utilisateur est connecté
+window.addEventListener('load', function() {
+  const token = localStorage.getItem('inibara_token')
+  const prenom = localStorage.getItem('inibara_prenom')
+  const type = localStorage.getItem('inibara_type')
+  if (token </body></body> prenom) {
+    // Afficher la barre de bienvenue
+    const bar = document.getElementById('welcomeBar')
+    if (bar) {
+      bar.style.display = 'flex'
+      document.getElementById('welcomeMsg').textContent = '👋 Bonjour ' + prenom + ' ! Bienvenue sur Inibara.ci'
+    }
+    // Changer le bouton S'inscrire en Mon Espace
+    const navCta = document.querySelector('.nav-cta')
+    if (navCta) {
+      navCta.textContent = type === 'artisan' ? '🔧 Mon espace' : '🙋 Mon espace'
+      navCta.href = type === 'artisan' ? 'inibara-dashboard-artisan.html' : 'inibara-recherche.html'
+    }
+  }
+})
+
+function seDeconnecter() {
+  localStorage.removeItem('inibara_token')
+  localStorage.removeItem('inibara_user_id')
+  localStorage.removeItem('inibara_email')
+  localStorage.removeItem('inibara_type')
+  localStorage.removeItem('inibara_prenom')
+  window.location.reload()
 }
 </script>
 </body>
