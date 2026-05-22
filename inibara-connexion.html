@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Connexion – Inibara.ci</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --brick:#B5382A;--brick-dark:#8C2820;--brick-light:#D4544A;
+      --navy:#0F1F3D;--navy-mid:#162848;
+      --green:#22C55E;--red:#F43F5E;--gold:#D4A843;
+      --bg:#F5F0E8;--white:#FFFFFF;--dark:#0F0F0F;
+      --border:#E5DDD0;--border2:#D4C8B4;
+      --text:#1C1917;--gray:#78716C;--muted:#A8A29E;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+    nav{background:rgba(245,240,232,0.95);border-bottom:1px solid var(--border);padding:14px 36px;display:flex;align-items:center;justify-content:space-between;}
+    .logo{font-family:'Playfair Display',serif;font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--dark);}
+    .lm{width:30px;height:30px;background:linear-gradient(135deg,var(--brick),var(--brick-dark));border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.88rem;font-weight:900;color:#fff;}
+    .logo span{color:var(--brick);}
+    .nav-link{font-size:0.85rem;color:var(--gray);text-decoration:none;}
+    .nav-link span{color:var(--brick);font-weight:600;}
+    .main{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 57px);}
+
+    /* LEFT PANEL */
+    .left-panel{background:linear-gradient(135deg,var(--navy),var(--navy-mid));padding:60px 48px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;}
+    .lp-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:36px 36px;}
+    .lp-glow{position:absolute;top:-40px;right:-40px;width:250px;height:250px;background:radial-gradient(circle,rgba(181,56,42,0.2),transparent 70%);}
+    .lp-content{position:relative;z-index:2;}
+    .lp-title{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:900;color:#fff;line-height:1.1;margin-bottom:16px;}
+    .lp-title em{font-style:italic;color:var(--brick-light);}
+    .lp-sub{font-size:0.9rem;color:rgba(255,255,255,0.55);line-height:1.75;margin-bottom:36px;}
+    .lp-feat{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+    .lp-feat-icon{width:36px;height:36px;border-radius:9px;background:rgba(181,56,42,0.15);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .lp-feat-text{font-size:0.85rem;color:rgba(255,255,255,0.7);}
+    .lp-feat-text strong{color:#fff;}
+    .lp-stats{display:flex;gap:28px;margin-top:36px;padding-top:28px;border-top:1px solid rgba(255,255,255,0.08);}
+    .lp-stat-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:800;color:var(--brick-light);}
+    .lp-stat-label{font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:2px;}
+
+    /* RIGHT PANEL */
+    .right-panel{padding:48px 52px;display:flex;flex-direction:column;justify-content:center;background:var(--white);}
+    .rp-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:800;color:var(--navy);margin-bottom:6px;}
+    .rp-sub{font-size:0.85rem;color:var(--gray);margin-bottom:32px;}
+
+    .fg{margin-bottom:16px;}
+    .fg label{display:block;font-size:0.72rem;font-weight:600;color:var(--gray);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;}
+    .fg input{width:100%;padding:12px 14px;background:var(--bg);border:1.5px solid var(--border2);border-radius:9px;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;outline:none;transition:all .2s;}
+    .fg input:focus{border-color:var(--brick);background:#fff;}
+    .fg-forgot{display:flex;justify-content:flex-end;margin-top:5px;}
+    .fg-forgot a{font-size:0.75rem;color:var(--brick);text-decoration:none;}
+    .fg-forgot a:hover{text-decoration:underline;}
+
+    .pwd-wrap{position:relative;}
+    .pwd-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:1rem;color:var(--muted);}
+
+    .btn-submit{width:100%;padding:14px;background:var(--brick);color:#fff;border:none;border-radius:9px;font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all .2s;margin-top:4px;}
+    .btn-submit:hover{background:var(--brick-dark);}
+    .btn-submit:disabled{background:var(--muted);cursor:not-allowed;}
+
+    .alert{padding:12px 16px;border-radius:9px;font-size:0.83rem;margin-bottom:16px;display:none;}
+    .alert.show{display:block;}
+    .alert.error{background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);color:#9F1239;}
+    .alert.success{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);color:#166534;}
+
+    .divider{text-align:center;color:var(--muted);font-size:0.78rem;margin:20px 0;position:relative;}
+    .divider::before,.divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border);}
+    .divider::before{left:0;}.divider::after{right:0;}
+
+    .register-link{text-align:center;font-size:0.83rem;color:var(--gray);margin-top:16px;}
+    .register-link a{color:var(--brick);font-weight:600;text-decoration:none;}
+
+    /* Spinner */
+    .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-right:6px;vertical-align:middle;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Success */
+    .success-page{display:none;text-align:center;padding:20px 0;}
+    .success-page.show{display:block;}
+    .success-icon{width:72px;height:72px;border-radius:50%;background:rgba(34,197,94,0.1);color:var(--green);font-size:2rem;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+    .success-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:800;color:var(--navy);margin-bottom:8px;}
+    .success-sub{color:var(--gray);font-size:0.88rem;line-height:1.7;margin-bottom:24px;}
+    .btn-dashboard{width:100%;padding:13px;border:none;border-radius:9px;font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;cursor:pointer;transition:background .2s;margin-bottom:10px;}
+    .btn-client{background:var(--navy);color:#fff;}
+    .btn-client:hover{background:var(--brick);}
+    .btn-artisan{background:var(--brick);color:#fff;}
+    .btn-artisan:hover{background:var(--brick-dark);}
+
+    @media(max-width:768px){
+      .main{grid-template-columns:1fr;}
+      .left-panel{display:none;}
+      .right-panel{padding:32px 24px;}
+      nav{padding:14px 20px;}
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo"><div class="lm">I</div>Inibara<span>.ci</span></a>
+  <a href="inibara-inscription.html" class="nav-link">Pas encore inscrit ? <span>Créer un compte →</span></a>
+</nav>
+
+<div class="main">
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="lp-grid"></div>
+    <div class="lp-glow"></div>
+    <div class="lp-content">
+      <h1 class="lp-title">Bon retour sur<br/><em>Inibara.ci</em> !</h1>
+      <p class="lp-sub">Connectez-vous pour accéder à votre espace personnel et gérer vos missions.</p>
+      <div class="lp-feat"><div class="lp-feat-icon">📋</div><div class="lp-feat-text"><strong>Clients</strong> — Retrouvez vos missions et réservations</div></div>
+      <div class="lp-feat"><div class="lp-feat-icon">🔧</div><div class="lp-feat-text"><strong>Artisans</strong> — Gérez vos missions et vos gains</div></div>
+      <div class="lp-feat"><div class="lp-feat-icon">💳</div><div class="lp-feat-text"><strong>Paiements sécurisés</strong> — Wave, Orange Money, MTN</div></div>
+      <div class="lp-stats">
+        <div><div class="lp-stat-num">1 200+</div><div class="lp-stat-label">Artisans</div></div>
+        <div><div class="lp-stat-num">9 000+</div><div class="lp-stat-label">Clients</div></div>
+        <div><div class="lp-stat-num">8%</div><div class="lp-stat-label">Commission</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div id="formArea">
+      <div class="rp-title">Se connecter</div>
+      <p class="rp-sub">Bienvenue ! Entrez vos identifiants pour accéder à votre espace.</p>
+
+      <div class="alert error" id="alertError"></div>
+      <div class="alert success" id="alertSuccess"></div>
+
+      <div class="fg">
+        <label>Email *</label>
+        <input type="email" id="email" placeholder="votre@email.com"/>
+      </div>
+      <div class="fg">
+        <label>Mot de passe *</label>
+        <div class="pwd-wrap">
+          <input type="password" id="password" placeholder="Votre mot de passe"/>
+          <button class="pwd-toggle" onclick="togglePwd()" type="button">👁️</button>
+        </div>
+        <div class="fg-forgot"><a href="inibara-reset-password.html">Mot de passe oublié ?</a></div>
+      </div>
+
+      <button class="btn-submit" id="btnConnexion" onclick="seConnecter()">
+        Se connecter →
+      </button>
+
+      <div class="divider">ou</div>
+      <div class="register-link">
+        Pas encore de compte ? <a href="inibara-inscription.html">S'inscrire gratuitement</a>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-page" id="successPage">
+      <div class="success-icon">✅</div>
+      <div class="success-title" id="successTitle">Connexion réussie !</div>
+      <p class="success-sub" id="successMsg">Bienvenue sur Inibara !</p>
+      <button class="btn-dashboard btn-client" id="btnDashboard" onclick="allerTableauBord()">
+        Accéder à mon espace →
+      </button>
+      <button class="btn-dashboard" style="background:var(--bg);color:var(--text);border:1.5px solid var(--border2);" onclick="window.location.href='index.html'">
+        Retour à l'accueil
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://ldnzjgpqkcpuawitnbel.supabase.co'
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkbnpqZ3Bxa2NwdWF3aXRuYmVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMjQzNDIsImV4cCI6MjA5NDgwMDM0Mn0.uHaOZZsOKZrKbixl2-r75pxcLS_68Q0kvRU5mLClyHI'
+
+  let typeCompte = 'client'
+  let userPrenom = ''
+
+  function togglePwd() {
+    const pwd = document.getElementById('password')
+    pwd.type = pwd.type === 'password' ? 'text' : 'password'
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('alertError')
+    el.textContent = '❌ ' + msg
+    el.classList.add('show')
+    document.getElementById('alertSuccess').classList.remove('show')
+  }
+
+  function showSuccess(msg) {
+    const el = document.getElementById('alertSuccess')
+    el.textContent = '✅ ' + msg
+    el.classList.add('show')
+    document.getElementById('alertError').classList.remove('show')
+  }
+
+  async function seConnecter() {
+    const email = document.getElementById('email').value.trim()
+    const password = document.getElementById('password').value
+    const btn = document.getElementById('btnConnexion')
+
+    if (!email || !password) {
+      showError('Veuillez remplir tous les champs.')
+      return
+    }
+
+    btn.disabled = true
+    btn.innerHTML = '<span class="spinner"></span> Connexion en cours…'
+
+    try {
+      // Connexion via API Supabase
+      const response = await fetch(SUPABASE_URL + '/auth/v1/token?grant_type=password', {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email, password: password })
+      })
+
+      const data = await response.json()
+
+      if (!response.ok || data.error) {
+        throw new Error(data.error_description || data.msg || 'Email ou mot de passe incorrect.')
+      }
+
+      // Connexion réussie — récupérer les infos utilisateur
+      const userId = data.user.id
+      const accessToken = data.access_token
+
+      // Sauvegarder le token
+      localStorage.setItem('inibara_token', accessToken)
+      localStorage.setItem('inibara_user_id', userId)
+      localStorage.setItem('inibara_email', email)
+
+      // Récupérer le profil depuis la table utilisateurs
+      const profileResp = await fetch(SUPABASE_URL + '/rest/v1/utilisateurs?id=eq.' + userId, {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + accessToken,
+          'Content-Type': 'application/json'
+        }
+      })
+
+      const profiles = await profileResp.json()
+
+      if (profiles && profiles.length > 0) {
+        const profile = profiles[0]
+        typeCompte = profile.type_compte
+        userPrenom = profile.prenom
+
+        localStorage.setItem('inibara_type', typeCompte)
+        localStorage.setItem('inibara_prenom', userPrenom)
+
+        // Afficher succès
+        document.getElementById('formArea').style.display = 'none'
+        document.getElementById('successPage').classList.add('show')
+        document.getElementById('successTitle').textContent = 'Bienvenue ' + userPrenom + ' ! 👋'
+
+        if (typeCompte === 'artisan') {
+          document.getElementById('successMsg').textContent = 'Vous êtes connecté en tant qu\'artisan. Accédez à votre tableau de bord pour gérer vos missions.'
+          document.getElementById('btnDashboard').className = 'btn-dashboard btn-artisan'
+          document.getElementById('btnDashboard').textContent = '🔧 Mon espace artisan →'
+        } else {
+          document.getElementById('successMsg').textContent = 'Vous êtes connecté en tant que client. Trouvez un artisan près de chez vous !'
+          document.getElementById('btnDashboard').textContent = '🙋 Mon espace client →'
+        }
+      } else {
+        // Utilisateur connecté mais pas de profil
+        document.getElementById('formArea').style.display = 'none'
+        document.getElementById('successPage').classList.add('show')
+        document.getElementById('successTitle').textContent = 'Connexion réussie ! 👋'
+        document.getElementById('successMsg').textContent = 'Vous êtes connecté sur Inibara.ci'
+      }
+
+    } catch (err) {
+      let msg = err.message
+      if (msg.includes('Invalid login')) msg = 'Email ou mot de passe incorrect.'
+      if (msg.includes('Email not confirmed')) msg = 'Veuillez confirmer votre email avant de vous connecter.'
+      showError(msg)
+      btn.disabled = false
+      btn.innerHTML = 'Se connecter →'
+    }
+  }
+
+  function allerTableauBord() {
+    if (typeCompte === 'artisan') {
+      window.location.href = 'inibara-dashboard-artisan.html'
+    } else {
+      window.location.href = 'inibara-recherche.html'
+    }
+  }
+
+  // Permettre connexion avec la touche Entrée
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') seConnecter()
+  })
+
+  // Vérifier si déjà connecté
+  window.onload = function() {
+    const token = localStorage.getItem('inibara_token')
+    if (token) {
+      const prenom = localStorage.getItem('inibara_prenom') || ''
+      const type = localStorage.getItem('inibara_type') || 'client'
+      typeCompte = type
+      userPrenom = prenom
+      document.getElementById('formArea').style.display = 'none'
+      document.getElementById('successPage').classList.add('show')
+      document.getElementById('successTitle').textContent = prenom ? 'Bonjour ' + prenom + ' ! 👋' : 'Vous êtes connecté ! 👋'
+      document.getElementById('successMsg').textContent = 'Vous êtes déjà connecté sur Inibara.ci'
+      document.getElementById('btnDashboard').textContent = type === 'artisan' ? '🔧 Mon espace artisan →' : '🙋 Mon espace client →'
+    }
+  }
+</script>
+</body>
+</html>
