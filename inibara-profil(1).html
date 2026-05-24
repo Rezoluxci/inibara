@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Koffi Kouamé – Plombier · Inibara</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=Lora:ital,wght@0,400;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --brick:#B5382A;--brick-dark:#8C2820;--brick-light:#D4544A;--brick-glow:rgba(181,56,42,0.1);
+      --navy:#0F1F3D;--navy-mid:#162848;--navy-light:#1E3560;
+      --gold:#D4A843;--gold-light:#F0C96A;
+      --green:#22C55E;--red:#F43F5E;--yellow:#FBBF24;
+      --bg:#F5F0E8;--white:#FFFFFF;--dark:#0F0F0F;
+      --card:#FFFFFF;--border:#E5DDD0;--border2:#D4C8B4;
+      --text:#1C1917;--gray:#78716C;--muted:#A8A29E;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,240,232,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:14px 40px;display:flex;align-items:center;justify-content:space-between;}
+    .logo{font-family:'Playfair Display',serif;font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--dark);}
+    .logo-mark{width:30px;height:30px;background:linear-gradient(135deg,var(--brick),var(--brick-dark));border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.9rem;font-weight:900;color:#fff;}
+    .logo span{color:var(--brick);}
+    .nav-back{color:var(--gray);font-size:0.83rem;text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .2s;}
+    .nav-back:hover{color:var(--brick);}
+    .nav-share{background:none;border:1.5px solid var(--border2);padding:7px 14px;border-radius:5px;font-size:0.8rem;cursor:pointer;transition:all .2s;}
+    .nav-share:hover{border-color:var(--brick);color:var(--brick);}
+
+    .cover{height:260px;margin-top:57px;background:linear-gradient(135deg,var(--navy),var(--navy-light));position:relative;overflow:hidden;}
+    .cover-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:36px 36px;}
+    .cover-glow{position:absolute;top:-40px;left:20%;width:300px;height:300px;background:radial-gradient(circle,rgba(181,56,42,0.2),transparent 70%);}
+    .cover-badge{position:absolute;top:20px;right:24px;display:flex;align-items:center;gap:6px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:#4ade80;padding:7px 14px;border-radius:4px;font-size:0.75rem;font-weight:600;}
+    .cb-dot{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 1.8s infinite;}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+    .profile-wrap{max-width:1000px;margin:0 auto;padding:0 24px;}
+    .profile-header{display:flex;align-items:flex-end;gap:22px;margin-top:-54px;margin-bottom:28px;position:relative;z-index:2;}
+    .avatar-ring{width:108px;height:108px;border-radius:50%;padding:4px;background:linear-gradient(135deg,var(--brick),var(--brick-dark));flex-shrink:0;box-shadow:0 8px 28px rgba(181,56,42,0.3);}
+    .avatar-inner{width:100%;height:100%;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--navy-mid));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--brick-light);border:3px solid var(--bg);}
+    .profile-info{flex:1;padding-bottom:4px;}
+    .profile-name{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:900;color:var(--navy);line-height:1.1;}
+    .profile-metier{font-size:0.95rem;color:var(--brick);font-weight:600;margin-top:4px;}
+    .profile-meta{display:flex;align-items:center;gap:16px;margin-top:8px;flex-wrap:wrap;}
+    .pm{display:flex;align-items:center;gap:4px;font-size:0.78rem;color:var(--gray);}
+    .profile-actions{display:flex;gap:9px;padding-bottom:4px;flex-shrink:0;}
+    .btn-primary{background:var(--brick);color:#fff;border:none;padding:11px 26px;border-radius:5px;font-family:'Outfit',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;transition:all .2s;}
+    .btn-primary:hover{background:var(--brick-dark);transform:scale(1.02);}
+    .btn-secondary{background:none;color:var(--dark);border:1.5px solid var(--border2);padding:11px 18px;border-radius:5px;font-size:0.85rem;cursor:pointer;transition:all .2s;}
+    .btn-secondary:hover{border-color:var(--brick);color:var(--brick);}
+
+    .layout{display:grid;grid-template-columns:1fr 310px;gap:22px;max-width:1000px;margin:0 auto;padding:0 24px 60px;}
+    .card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;margin-bottom:16px;overflow:hidden;}
+    .card-accent{border-top:3px solid var(--brick);}
+    .ch{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .ct{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;color:var(--navy);}
+    .cb{padding:22px;}
+
+    .rating-hero{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:10px;padding:22px;display:flex;align-items:center;gap:22px;margin-bottom:16px;}
+    .rb{font-family:'Playfair Display',serif;font-size:4rem;font-weight:900;color:var(--brick-light);line-height:1;}
+    .rs{font-size:1.3rem;color:var(--gold);letter-spacing:2px;}
+    .rc{font-size:0.78rem;color:rgba(255,255,255,0.4);margin-top:3px;}
+    .rbars{flex:1;}
+    .rrow{display:flex;align-items:center;gap:9px;margin-bottom:6px;}
+    .rlbl{font-size:0.68rem;color:rgba(255,255,255,0.4);width:12px;text-align:right;}
+    .rtrack{flex:1;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;}
+    .rfill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--brick),var(--brick-light));}
+    .rcnt{font-size:0.68rem;color:rgba(255,255,255,0.3);width:18px;}
+
+    .skills-grid{display:flex;flex-wrap:wrap;gap:7px;}
+    .sk{background:rgba(15,31,61,0.06);border:1px solid rgba(15,31,61,0.12);color:var(--navy);padding:6px 12px;border-radius:4px;font-size:0.78rem;font-weight:500;}
+
+    .services-list{display:flex;flex-direction:column;gap:10px;}
+    .svc{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;cursor:pointer;transition:all .2s;}
+    .svc:hover{border-color:rgba(181,56,42,0.3);}
+    .svc-left{display:flex;align-items:center;gap:11px;}
+    .svc-icon{width:38px;height:38px;border-radius:9px;background:rgba(181,56,42,0.08);display:flex;align-items:center;justify-content:center;font-size:1rem;}
+    .svc-name{font-size:0.87rem;font-weight:600;}
+    .svc-desc{font-size:0.73rem;color:var(--muted);margin-top:2px;}
+    .svc-price{font-family:'Playfair Display',serif;font-size:0.92rem;font-weight:800;color:var(--brick);}
+
+    .reviews-list{display:flex;flex-direction:column;}
+    .rev{padding:18px 0;border-bottom:1px solid var(--border);}
+    .rev:last-child{border-bottom:none;}
+    .rev-top{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+    .rev-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:800;font-size:0.75rem;flex-shrink:0;}
+    .rev-name{font-size:0.85rem;font-weight:600;}
+    .rev-date{font-size:0.72rem;color:var(--muted);}
+    .rev-stars{margin-left:auto;color:var(--gold);font-size:0.82rem;}
+    .rev-text{font-family:'Lora',serif;font-style:italic;font-size:0.85rem;color:#4B4B4B;line-height:1.7;}
+    .rev-tag{display:inline-block;margin-top:7px;background:var(--brick-glow);color:var(--brick);padding:2px 9px;border-radius:4px;font-size:0.68rem;font-weight:600;}
+    .load-more{width:100%;padding:11px;margin-top:4px;background:none;border:1.5px solid var(--border2);border-radius:8px;color:var(--gray);font-family:'Outfit',sans-serif;font-size:0.82rem;cursor:pointer;transition:all .2s;}
+    .load-more:hover{border-color:var(--brick);color:var(--brick);}
+
+    .sticky{position:sticky;top:74px;}
+    .contact-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:14px;}
+    .contact-top{background:linear-gradient(135deg,var(--navy),var(--navy-mid));padding:18px 20px;}
+    .ca-avail{display:flex;align-items:center;gap:7px;color:#4ade80;font-size:0.78rem;font-weight:600;margin-bottom:10px;}
+    .ca-dot{width:6px;height:6px;background:#4ade80;border-radius:50%;}
+    .ca-rate{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#fff;}
+    .ca-rate span{font-size:0.82rem;font-weight:400;color:rgba(255,255,255,0.4);}
+    .ca-urgent{font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:3px;}
+    .contact-body{padding:18px 20px;}
+    .ca-btn{width:100%;padding:13px;border:none;border-radius:8px;font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:7px;}
+    .ca-main{background:var(--brick);color:#fff;}
+    .ca-main:hover{background:var(--brick-dark);}
+    .ca-ghost{background:none;color:var(--dark);border:1.5px solid var(--border2);}
+    .ca-ghost:hover{border-color:var(--brick);color:var(--brick);}
+    .ca-div{text-align:center;color:var(--muted);font-size:0.72rem;margin:11px 0;position:relative;}
+    .ca-div::before,.ca-div::after{content:'';position:absolute;top:50%;width:38%;height:1px;background:var(--border);}
+    .ca-div::before{left:0;}.ca-div::after{right:0;}
+    .pay-methods{display:flex;gap:7px;justify-content:center;margin-top:12px;}
+    .pm-pill{background:var(--bg);border:1px solid var(--border);padding:6px 11px;border-radius:6px;font-size:0.72rem;display:flex;align-items:center;gap:4px;}
+
+    .info-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;margin-bottom:14px;}
+    .info-list{display:flex;flex-direction:column;}
+    .ir{display:flex;align-items:center;justify-content:space-between;padding:11px 18px;border-bottom:1px solid var(--border);font-size:0.82rem;}
+    .ir:last-child{border-bottom:none;}
+    .ir .lbl{color:var(--gray);}
+    .ir .val{font-weight:600;}
+
+    .trust-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;}
+    .trust-list{display:flex;flex-direction:column;gap:7px;padding:16px 18px;}
+    .ti{display:flex;align-items:center;gap:9px;font-size:0.79rem;color:#4B5563;}
+    .ti-icon{width:28px;height:28px;border-radius:7px;background:rgba(34,197,94,0.07);display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;}
+
+    .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(15,31,61,0.6);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;}
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal{background:var(--card);border-radius:16px;padding:36px;width:100%;max-width:460px;position:relative;transform:scale(.95);transition:transform .25s;box-shadow:0 24px 60px rgba(15,31,61,0.2);}
+    .modal-overlay.open .modal{transform:scale(1);}
+    .modal-close{position:absolute;top:14px;right:14px;background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--gray);}
+    .modal h2{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:800;color:var(--navy);margin-bottom:5px;}
+    .modal-sub{color:var(--gray);font-size:0.82rem;margin-bottom:22px;}
+    .fg{margin-bottom:14px;}
+    .fg label{display:block;font-size:0.72rem;font-weight:600;color:var(--gray);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;}
+    .fg input,.fg select,.fg textarea{width:100%;padding:11px 13px;background:var(--bg);border:1.5px solid var(--border2);border-radius:8px;color:var(--text);font-family:'Outfit',sans-serif;font-size:0.87rem;outline:none;transition:border-color .2s;}
+    .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--brick);}
+    .fg textarea{resize:vertical;min-height:80px;}
+    .fg-row{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+    .btn-modal{width:100%;padding:13px;background:var(--brick);color:#fff;border:none;border-radius:8px;font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:background .2s;margin-top:4px;}
+    .btn-modal:hover{background:var(--brick-dark);}
+
+    #toast{position:fixed;bottom:22px;right:22px;z-index:999;background:var(--navy);color:#fff;padding:11px 18px;border-radius:8px;font-size:0.82rem;opacity:0;transform:translateY(8px);transition:all .28s;pointer-events:none;border-left:3px solid var(--brick);}
+    @media(max-width:768px){nav{padding:12px 16px;}.cover{height:160px;}.profile-header{flex-direction:column;align-items:flex-start;margin-top:-36px;}.profile-actions{width:100%;}.layout{grid-template-columns:1fr;padding:0 16px 40px;}.sticky{position:static;}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="#" class="logo"><div class="logo-mark">I</div>Inibara<span>.ci</span></a>
+  <a href="#" class="nav-back">← Retour aux résultats</a>
+  <button class="nav-share" onclick="toast('Lien copié ! 🔗')">📤 Partager</button>
+</nav>
+
+<div class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-glow"></div>
+  <div class="cover-badge"><div class="cb-dot"></div>Disponible maintenant</div>
+</div>
+
+<div class="profile-wrap">
+  <div class="profile-header">
+    <div class="avatar-ring"><div class="avatar-inner">KK</div></div>
+    <div class="profile-info">
+      <div class="profile-name">Koffi Kouamé</div>
+      <div class="profile-metier">🔧 Plombier Professionnel</div>
+      <div class="profile-meta">
+        <div class="pm">📍 Cocody, Abidjan</div>
+        <div class="pm">⭐ 4.9 · 87 avis</div>
+        <div class="pm">✅ Vérifié Inibara</div>
+        <div class="pm">🕐 Membre depuis 2024</div>
+      </div>
+    </div>
+    <div class="profile-actions">
+      <button class="btn-primary" onclick="openModal()">📅 Réserver</button>
+      <button class="btn-secondary" onclick="toast('Message envoyé !')">💬 Message</button>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <div>
+    <div class="card card-accent">
+      <div class="ch"><div class="ct">À propos</div></div>
+      <div class="cb">
+        <p style="font-family:'Lora',serif;font-size:0.92rem;line-height:1.8;color:#374151;">Plombier professionnel avec plus de <strong>10 ans d'expérience</strong> en Côte d'Ivoire, spécialisé dans la réparation de fuites, l'installation sanitaire et la maintenance. J'interviens rapidement dans tout <strong>Cocody et ses environs</strong>.</p>
+        <p style="font-family:'Lora',serif;font-size:0.92rem;line-height:1.8;color:#374151;margin-top:12px;">Mon engagement : un travail soigné, des tarifs transparents, disponible 7j/7 pour les urgences. Plus de <strong>500 clients</strong> font confiance à Inibara et à mon travail.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><div class="ct">Compétences & Spécialités</div></div>
+      <div class="cb"><div class="skills-grid">
+        <span class="sk">🚰 Réparation de fuites</span><span class="sk">🏗️ Installation sanitaire</span>
+        <span class="sk">🔩 Canalisation</span><span class="sk">🚿 Salle de bain</span>
+        <span class="sk">🪣 Évacuation</span><span class="sk">🌊 Détection de fuite</span>
+        <span class="sk">🔧 Robinetterie</span><span class="sk">🏠 Plomberie neuve</span>
+        <span class="sk">🚨 Urgences 24h/24</span>
+      </div></div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><div class="ct">Services & Tarifs</div></div>
+      <div class="cb"><div class="services-list">
+        <div class="svc"><div class="svc-left"><div class="svc-icon">🚰</div><div><div class="svc-name">Réparation de fuite</div><div class="svc-desc">Diagnostic et réparation rapide</div></div></div><div class="svc-price">5 000 FCFA/h</div></div>
+        <div class="svc"><div class="svc-left"><div class="svc-icon">🏗️</div><div><div class="svc-name">Installation sanitaire</div><div class="svc-desc">WC, lavabo, douche, baignoire</div></div></div><div class="svc-price">25 000 FCFA</div></div>
+        <div class="svc"><div class="svc-left"><div class="svc-icon">🔩</div><div><div class="svc-name">Débouchage canalisation</div><div class="svc-desc">Évier, douche, WC bouché</div></div></div><div class="svc-price">8 000 FCFA</div></div>
+        <div class="svc"><div class="svc-left"><div class="svc-icon">🚨</div><div><div class="svc-name">Urgence 24h/24</div><div class="svc-desc">Intervention en moins d'1h</div></div></div><div class="svc-price">15 000 FCFA</div></div>
+      </div></div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><div class="ct">Avis clients (87)</div><div style="font-size:.75rem;color:var(--muted)">Tous vérifiés</div></div>
+      <div class="cb" style="padding-top:0">
+        <div class="rating-hero">
+          <div style="text-align:center"><div class="rb">4.9</div><div class="rs">★★★★★</div><div class="rc">87 avis</div></div>
+          <div class="rbars">
+            <div class="rrow"><div class="rlbl">5</div><div class="rtrack"><div class="rfill" style="width:92%"></div></div><div class="rcnt" style="color:rgba(255,255,255,.4)">80</div></div>
+            <div class="rrow"><div class="rlbl">4</div><div class="rtrack"><div class="rfill" style="width:6%"></div></div><div class="rcnt" style="color:rgba(255,255,255,.4)">5</div></div>
+            <div class="rrow"><div class="rlbl">3</div><div class="rtrack"><div class="rfill" style="width:2%"></div></div><div class="rcnt" style="color:rgba(255,255,255,.4)">2</div></div>
+            <div class="rrow"><div class="rlbl">2</div><div class="rtrack"><div class="rfill" style="width:0"></div></div><div class="rcnt" style="color:rgba(255,255,255,.4)">0</div></div>
+            <div class="rrow"><div class="rlbl">1</div><div class="rtrack"><div class="rfill" style="width:0"></div></div><div class="rcnt" style="color:rgba(255,255,255,.4)">0</div></div>
+          </div>
+        </div>
+        <div class="reviews-list">
+          <div class="rev"><div class="rev-top"><div class="rev-av" style="background:#FED7AA22;color:#B5382A">AT</div><div><div class="rev-name">Adjoua Traoré</div><div class="rev-date">12 mai 2026</div></div><div class="rev-stars">★★★★★</div></div><div class="rev-text">"Koffi est venu réparer une fuite urgente chez moi. Arrivé en 45 minutes, travail propre et soigné. Je recommande vivement !"</div><span class="rev-tag">Réparation de fuite</span></div>
+          <div class="rev"><div class="rev-top"><div class="rev-av" style="background:#BBF7D022;color:#166534">MK</div><div><div class="rev-name">Mohamed Koné</div><div class="rev-date">3 mai 2026</div></div><div class="rev-stars">★★★★★</div></div><div class="rev-text">"Excellent artisan ! Il a installé toute la plomberie de ma salle de bain. Prix raisonnable, ponctuel et très professionnel."</div><span class="rev-tag">Installation sanitaire</span></div>
+          <div class="rev"><div class="rev-top"><div class="rev-av" style="background:#DBEAFE22;color:#1D4ED8">FA</div><div><div class="rev-name">Fatou Assohoun</div><div class="rev-date">27 avril 2026</div></div><div class="rev-stars">★★★★★</div></div><div class="rev-text">"Mon WC était bouché depuis 2 jours. Koffi est passé le soir même et a tout réglé en 30 minutes. Très à l'écoute !"</div><span class="rev-tag">Débouchage canalisation</span></div>
+        </div>
+        <button class="load-more" onclick="toast('Chargement des avis…')">Voir les 84 avis suivants</button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="sticky">
+      <div class="contact-card">
+        <div class="contact-top">
+          <div class="ca-avail"><div class="ca-dot"></div>Disponible maintenant</div>
+          <div class="ca-rate">5 000 FCFA <span>/ heure</span></div>
+          <div class="ca-urgent">Urgence : 15 000 FCFA / intervention</div>
+        </div>
+        <div class="contact-body">
+          <button class="ca-btn ca-main" onclick="openModal()">📅 Réserver une prestation</button>
+          <button class="ca-btn ca-ghost" onclick="toast('Ouverture du chat…')">💬 Envoyer un message</button>
+          <div class="ca-div">Paiement sécurisé via</div>
+          <div class="pay-methods">
+            <div class="pm-pill">🟠 Orange</div>
+            <div class="pm-pill">🔵 Wave</div>
+            <div class="pm-pill">🟡 MTN</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="ch"><div class="ct">Informations</div></div>
+        <div class="info-list">
+          <div class="ir"><span class="lbl">Ville</span><span class="val">Cocody, Abidjan</span></div>
+          <div class="ir"><span class="lbl">Rayon d'intervention</span><span class="val">15 km</span></div>
+          <div class="ir"><span class="lbl">Expérience</span><span class="val">10+ ans</span></div>
+          <div class="ir"><span class="lbl">Missions réalisées</span><span class="val">534</span></div>
+          <div class="ir"><span class="lbl">Taux de réponse</span><span class="val" style="color:var(--green)">98%</span></div>
+          <div class="ir"><span class="lbl">Délai de réponse</span><span class="val">< 15 min</span></div>
+          <div class="ir"><span class="lbl">Urgences</span><span class="val" style="color:var(--green)">7j/7 · 24h/24</span></div>
+        </div>
+      </div>
+
+      <div class="trust-card">
+        <div class="ch"><div class="ct">Garanties Inibara</div></div>
+        <div class="trust-list">
+          <div class="ti"><div class="ti-icon">✅</div>Identité vérifiée par Inibara</div>
+          <div class="ti"><div class="ti-icon">🔒</div>Paiement sécurisé et protégé</div>
+          <div class="ti"><div class="ti-icon">⭐</div>Avis clients 100% authentiques</div>
+          <div class="ti"><div class="ti-icon">🛡️</div>Argent versé après validation</div>
+          <div class="ti"><div class="ti-icon">📞</div>Support Inibara en cas de litige</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="mo" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>📅 Réserver Koffi Kouamé</h2>
+    <p class="modal-sub">Plombier · Cocody, Abidjan · Inibara.ci</p>
+    <div class="fg"><label>Type de service</label><select><option>Réparation de fuite – 5 000 FCFA/h</option><option>Installation sanitaire – 25 000 FCFA</option><option>Débouchage – 8 000 FCFA</option><option>Urgence 24h/24 – 15 000 FCFA</option></select></div>
+    <div class="fg-row">
+      <div class="fg"><label>Date</label><input type="date"/></div>
+      <div class="fg"><label>Heure</label><input type="time"/></div>
+    </div>
+    <div class="fg"><label>Adresse</label><input type="text" placeholder="Ex: Cocody Riviera 3, Apt 4B"/></div>
+    <div class="fg"><label>Description</label><textarea placeholder="Décrivez votre problème…"></textarea></div>
+    <div class="fg"><label>Paiement</label><select><option>🟠 Orange Money</option><option>🔵 Wave</option><option>🟡 MTN MoMo</option></select></div>
+    <button class="btn-modal" onclick="closeModal();toast('✅ Réservation envoyée ! Koffi vous contactera sous 15 min.')">Confirmer la réservation →</button>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+function openModal(){document.getElementById('mo').classList.add('open');}
+function closeModal(){document.getElementById('mo').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';t.style.transform='translateY(0)';setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(8px)';},3000);}
+</script>
+
+<script>
+// ── INIBARA : Gestion connexion/déconnexion ──
+function seDeconnecter(){
+  localStorage.removeItem('inibara_token');
+  localStorage.removeItem('inibara_user_id');
+  localStorage.removeItem('inibara_email');
+  localStorage.removeItem('inibara_type');
+  localStorage.removeItem('inibara_prenom');
+  localStorage.removeItem('inibara_nom');
+  window.location.href='index.html';
+}
+
+function mettreAJourNav(){
+  const token = localStorage.getItem('inibara_token');
+  const prenom = localStorage.getItem('inibara_prenom') || '';
+  const type = localStorage.getItem('inibara_type') || 'client';
+
+  const menuNonConnecte = document.getElementById('menuNonConnecte');
+  const menuConnecte = document.getElementById('menuConnecte');
+  const navPrenom = document.getElementById('navPrenom');
+  const navAvatar = document.getElementById('navAvatar');
+  const dropdownDashboard = document.getElementById('dropdownDashboard');
+
+  if(token && prenom){
+    if(menuNonConnecte) menuNonConnecte.style.display='none';
+    if(menuConnecte) menuConnecte.style.display='flex';
+    if(navPrenom) navPrenom.textContent = prenom;
+    if(navAvatar) navAvatar.textContent = prenom.charAt(0).toUpperCase();
+    if(dropdownDashboard){
+      dropdownDashboard.href = type==='artisan' ? 'inibara-dashboard-artisan.html' : 'inibara-recherche.html';
+      dropdownDashboard.textContent = type==='artisan' ? '🔧 Mon espace artisan' : '🙋 Mon espace client';
+    }
+  } else {
+    if(menuNonConnecte) menuNonConnecte.style.display='flex';
+    if(menuConnecte) menuConnecte.style.display='none';
+  }
+}
+
+function toggleUserMenu(){
+  const d=document.getElementById('userDropdown');
+  if(d) d.style.display=d.style.display==='none'?'block':'none';
+}
+
+document.addEventListener('click',function(e){
+  const wrap=document.getElementById('userMenuWrap');
+  if(wrap&&!wrap.contains(e.target)){
+    const d=document.getElementById('userDropdown');
+    if(d) d.style.display='none';
+  }
+});
+
+window.addEventListener('load', mettreAJourNav);
+</script>
+
+</body>
+</html>
