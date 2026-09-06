@@ -172,7 +172,7 @@
 <body>
 <aside class="sidebar">
   <div class="sb-logo"><div class="logo-wrap"><div class="lm">I</div><div class="lt">Inibara<span>.ci</span></div></div></div>
-  <div class="sb-user"><div class="ua">KK</div><div><div class="un">Koffi Kouamé</div><div class="um">🔧 Plombier</div><div class="us"><div class="usd"></div>En ligne</div></div></div>
+  <div class="sb-user"><div class="ua" id="sbAvatar">?</div><div><div class="un">Chargement…</div><div class="um" id="sbMetier">🔧 Artisan</div><div class="us"><div class="usd"></div>En ligne</div></div></div>
   <nav class="sb-nav">
     <div class="ng">Principal</div>
     <div class="ni active" onclick="nav(this,'Tableau de bord')"><span class="ic">📊</span>Tableau de bord</div>
@@ -221,40 +221,31 @@
 
   <div class="content">
     <div class="welcome">
-      <div class="wl"><h2>Bonjour Koffi 👋</h2><p><strong style="color:var(--brick-light)">3 demandes en attente</strong> · 2 missions prévues aujourd'hui</p></div>
+      <div class="wl"><h2 id="welcomeMsg">Bonjour 👋</h2><p id="welcomeSub">Chargement de vos missions…</p></div>
       <div class="ws">
-        <div class="wsi"><div class="wsn">534</div><div class="wsl">Missions totales</div></div>
-        <div class="wsi"><div class="wsn">4.9★</div><div class="wsl">Note moyenne</div></div>
-        <div class="wsi"><div class="wsn">98%</div><div class="wsl">Satisfaction</div></div>
+        <div class="wsi"><div class="wsn" id="wsMissions">–</div><div class="wsl">Missions totales</div></div>
+        <div class="wsi"><div class="wsn" id="wsNote">–</div><div class="wsl">Note moyenne</div></div>
+        <div class="wsi"><div class="wsn" id="wsSatisfaction">–</div><div class="wsl">Satisfaction</div></div>
       </div>
     </div>
 
     <div class="stats-row">
-      <div class="sc b"><div class="sct"><span class="sci">💰</span><span class="str up">+18%</span></div><div class="scn">187 500</div><div class="scl">Gains ce mois (FCFA)</div></div>
-      <div class="sc g"><div class="sct"><span class="sci">📋</span><span class="str up">+5</span></div><div class="scn">24</div><div class="scl">Missions ce mois</div></div>
-      <div class="sc gb"><div class="sct"><span class="sci">⭐</span><span class="str up">+3</span></div><div class="scn">87</div><div class="scl">Avis clients</div></div>
-      <div class="sc bl"><div class="sct"><span class="sci">👁</span><span class="str up">+42%</span></div><div class="scn">1 248</div><div class="scl">Vues du profil</div></div>
+      <div class="sc b"><div class="sct"><span class="sci">💰</span></div><div class="scn" id="statGains">–</div><div class="scl">Gains ce mois (FCFA)</div></div>
+      <div class="sc g"><div class="sct"><span class="sci">📋</span></div><div class="scn" id="statMissionsMois">–</div><div class="scl">Missions ce mois</div></div>
+      <div class="sc gb"><div class="sct"><span class="sci">⭐</span></div><div class="scn" id="statAvis">–</div><div class="scl">Avis clients</div></div>
+      <div class="sc bl"><div class="sct"><span class="sci">👁</span></div><div class="scn">–</div><div class="scl">Vues du profil (bientôt)</div></div>
     </div>
 
     <div class="grid2">
       <div class="panel">
         <div class="ph"><div><div class="pht">Missions récentes</div><div class="phs">Dernières prestations</div></div><button class="pha">Voir tout →</button></div>
-        <div class="pb"><div class="ml">
-          <div class="mi"><div class="mii mi-b">🚰</div><div class="min"><div class="mit">Réparation fuite cuisine</div><div class="mim"><span>📍 Riviera 2</span><span>🕐 Hier 14h</span></div></div><div class="mir"><div class="mip">12 500 FCFA</div><div class="ms ms-done">Terminée</div></div></div>
-          <div class="mi"><div class="mii mi-bl">🏗️</div><div class="min"><div class="mit">Installation salle de bain</div><div class="mim"><span>📍 Angré</span><span>🕐 Auj. 09h</span></div></div><div class="mir"><div class="mip">45 000 FCFA</div><div class="ms ms-prog">En cours</div></div></div>
-          <div class="mi"><div class="mii mi-bl">🔩</div><div class="min"><div class="mit">Débouchage WC urgent</div><div class="mim"><span>📍 Plateau</span><span>🕐 Demain 08h</span></div></div><div class="mir"><div class="mip">15 000 FCFA</div><div class="ms ms-wait">Confirmée</div></div></div>
-          <div class="mi"><div class="mii mi-b">🚿</div><div class="min"><div class="mit">Remplacement robinetterie</div><div class="mim"><span>📍 Marcory</span><span>🕐 16 mai</span></div></div><div class="mir"><div class="mip">8 000 FCFA</div><div class="ms ms-done">Terminée</div></div></div>
-        </div></div>
+        <div class="pb"><div class="ml" id="listeMissionsRecentes"><div style="color:var(--muted);font-size:0.82rem">Chargement…</div></div></div>
       </div>
 
       <div style="display:flex;flex-direction:column;gap:12px;">
         <div class="panel">
-          <div class="ph"><div><div class="pht">📅 Aujourd'hui</div><div class="phs">Mardi 19 mai 2026</div></div><button class="pha">Agenda →</button></div>
-          <div class="pb"><div class="al">
-            <div class="ai ai-b"><div class="at">09:00</div><div class="ain"><div class="ait">Installation salle de bain</div><div class="aim">📍 Angré · Mariam Koné</div></div><div class="aip">45 000</div></div>
-            <div class="ai ai-bl"><div class="at">14:30</div><div class="ain"><div class="ait">Diagnostic fuite eau chaude</div><div class="aim">📍 2 Plateaux · Jean Bah</div></div><div class="aip">10 000</div></div>
-            <div class="ai ai-g"><div class="at">17:00</div><div class="ain"><div class="ait">Visite devis cuisine neuve</div><div class="aim">📍 Riviera Golf · Ouattara</div></div><div class="aip">Gratuit</div></div>
-          </div></div>
+          <div class="ph"><div><div class="pht">📅 Aujourd'hui</div><div class="phs" id="dateAujourdhui"></div></div><button class="pha">Agenda →</button></div>
+          <div class="pb"><div class="al" id="agendaAujourdhui"><div style="color:var(--muted);font-size:0.82rem">Chargement…</div></div></div>
         </div>
         <div class="panel">
           <div class="ph"><div class="pht">Revenus cette semaine</div></div>
@@ -267,25 +258,20 @@
       <div class="panel">
         <div class="ph"><div class="pht">💰 Mes Gains</div></div>
         <div class="pb">
-          <div class="gb"><div class="ga">187 500</div><div class="gl">FCFA disponibles ce mois</div></div>
+          <div class="gb"><div class="ga" id="gainsDisponibles">–</div><div class="gl">FCFA disponibles ce mois</div></div>
           <div class="gr">
-            <div class="grw"><span class="lbl">Total brut</span><span class="val">204 000 FCFA</span></div>
-            <div class="grw"><span class="lbl">Commission Inibara</span><span class="val" style="color:var(--red)">– 16 500 FCFA</span></div>
-            <div class="grw"><span class="lbl">Déjà retiré</span><span class="val">100 000 FCFA</span></div>
-            <div class="grw"><span class="lbl">Solde disponible</span><span class="val pos">87 500 FCFA</span></div>
+            <div class="grw"><span class="lbl">Total brut</span><span class="val" id="gainsBrut">–</span></div>
+            <div class="grw"><span class="lbl">Commission Inibara (8%)</span><span class="val" style="color:var(--red)" id="gainsCommission">–</span></div>
+            <div class="grw"><span class="lbl">Solde net</span><span class="val pos" id="gainsNet">–</span></div>
           </div>
-          <button class="btn-ret" onclick="toast('Retrait initié via Wave !')">💳 Retirer mes gains</button>
+          <button class="btn-ret" onclick="toast('Retrait — bientôt disponible (paiements pas encore branchés)')">💳 Retirer mes gains</button>
         </div>
       </div>
 
       <div class="panel">
         <div class="ph"><div><div class="pht">⭐ Derniers avis</div></div><button class="pha">Voir tout →</button></div>
         <div class="pb" style="padding-top:0">
-          <div class="avl">
-            <div class="avli"><div class="avlt"><div class="avla" style="background:#2D0A0822;color:#B5382A">AT</div><div><div class="avln">Adjoua T.</div><div class="avld">Hier</div></div><div class="avls">★★★★★</div></div><div class="avlx">"Travail rapide et soigné, je recommande !"</div><span class="avltg">Réparation fuite</span></div>
-            <div class="avli"><div class="avlt"><div class="avla" style="background:#05201022;color:#22C55E">MK</div><div><div class="avln">Mohamed K.</div><div class="avld">3 mai</div></div><div class="avls">★★★★★</div></div><div class="avlx">"Excellent artisan, prix raisonnable."</div><span class="avltg">Installation sanitaire</span></div>
-            <div class="avli"><div class="avlt"><div class="avla" style="background:#0A162822;color:#60A5FA">JN</div><div><div class="avln">Jean N.</div><div class="avld">15 avr.</div></div><div class="avls">★★★★☆</div></div><div class="avlx">"Bon travail, petit retard mais résultat là."</div><span class="avltg">Réparation fuite</span></div>
-          </div>
+          <div class="avl" id="listeAvis"><div style="color:var(--muted);font-size:0.82rem;padding:12px 0">Chargement…</div></div>
         </div>
       </div>
 
@@ -309,9 +295,10 @@
 </div>
 <div id="toast"></div>
 <script>
-const revData=[{d:'Lun',v:15000},{d:'Mar',v:32000},{d:'Mer',v:8000},{d:'Jeu',v:45000},{d:'Ven',v:28000},{d:'Sam',v:52000},{d:'Dim',v:0}];
-const maxR=Math.max(...revData.map(d=>d.v));
-document.getElementById('revChart').innerHTML=revData.map((d,i)=>{const h=maxR>0?Math.max(4,Math.round((d.v/maxR)*72)):4;const isT=i===0;return`<div class="rcc"><div class="rcb" style="height:${h}px;background:${isT?'var(--brick)':'rgba(181,56,42,0.25)'}" title="${d.v.toLocaleString()} FCFA"></div><div class="rcl">${d.d}</div></div>`;}).join('');
+const SUPABASE_URL = 'https://ldnzjgpqkcpuawitnbel.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkbnpqZ3Bxa2NwdWF3aXRuYmVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMjQzNDIsImV4cCI6MjA5NDgwMDM0Mn0.uHaOZZsOKZrKbixl2-r75pxcLS_68Q0kvRU5mLClyHI'
+const COMMISSION_INIBARA = 0.08 // 8%, comme annoncé sur le site
+
 let av=true;
 function toggleAvail(){av=!av;const t=document.getElementById('tog');t.classList.toggle('off',!av);toast(av?'✅ Vous êtes disponible':'⏸ Vous êtes indisponible');}
 function nav(el,title){document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));el.classList.add('active');document.getElementById('pageTitle').textContent=title;if(title!=='Tableau de bord')toast('Section "'+title+'" – bientôt disponible');}
@@ -339,28 +326,154 @@ function seDeconnecter(){
   window.location.href='index.html';
 }
 
-// Charger les infos utilisateur
-window.addEventListener('load', function(){
+async function supaGet(path, token){
+  const resp = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + (token || SUPABASE_KEY) }
+  })
+  if(!resp.ok) throw new Error('Erreur Supabase (' + resp.status + ')')
+  return await resp.json()
+}
+
+function iconMission(titre){
+  const t=(titre||'').toLowerCase();
+  if(t.includes('fuite')||t.includes('robinet')||t.includes('plomb')) return {icon:'🚰',cls:'mi-b'};
+  if(t.includes('électr')||t.includes('câbl')) return {icon:'⚡',cls:'mi-bl'};
+  if(t.includes('install')||t.includes('constr')) return {icon:'🏗️',cls:'mi-bl'};
+  return {icon:'🛠️',cls:'mi-g'};
+}
+function classeStatut(s){
+  return {en_attente:'ms-wait',confirmee:'ms-wait',en_cours:'ms-prog',terminee:'ms-done',annulee:'ms-can'}[s]||'ms-wait';
+}
+function libelleStatut(s){
+  return {en_attente:'En attente',confirmee:'Confirmée',en_cours:'En cours',terminee:'Terminée',annulee:'Annulée'}[s]||s;
+}
+
+function renderMissionsRecentes(missions){
+  const el=document.getElementById('listeMissionsRecentes');
+  if(!missions.length){ el.innerHTML='<div style="color:var(--muted);font-size:0.82rem">Aucune mission pour le moment.</div>'; return; }
+  el.innerHTML=missions.slice(0,4).map(m=>{
+    const ic=iconMission(m.titre);
+    const date=m.date_prevue?new Date(m.date_prevue).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'';
+    return `<div class="mi"><div class="mii ${ic.cls}">${ic.icon}</div><div class="min"><div class="mit">${m.titre}</div><div class="mim"><span>📍 ${m.lieu||'—'}</span><span>🕐 ${date}</span></div></div><div class="mir"><div class="mip">${Number(m.prix).toLocaleString()} FCFA</div><div class="ms ${classeStatut(m.statut)}">${libelleStatut(m.statut)}</div></div></div>`
+  }).join('');
+}
+
+function renderAgenda(missions){
+  const el=document.getElementById('agendaAujourdhui');
+  const aujourdHui=new Date().toDateString();
+  const duJour=missions.filter(m=>m.date_prevue && new Date(m.date_prevue).toDateString()===aujourdHui);
+  document.getElementById('dateAujourdhui').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  if(!duJour.length){ el.innerHTML='<div style="color:var(--muted);font-size:0.82rem">Aucune mission prévue aujourd\'hui.</div>'; return; }
+  el.innerHTML=duJour.map(m=>{
+    const heure=new Date(m.date_prevue).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    return `<div class="ai ai-b"><div class="at">${heure}</div><div class="ain"><div class="ait">${m.titre}</div><div class="aim">📍 ${m.lieu||'—'}</div></div><div class="aip">${Number(m.prix).toLocaleString()}</div></div>`
+  }).join('');
+}
+
+function renderRevenusSemaine(missions){
+  const jours=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+  const totaux=[0,0,0,0,0,0,0];
+  const auj=new Date(); const sept=new Date(auj); sept.setDate(auj.getDate()-6);
+  missions.forEach(m=>{
+    if(m.statut!=='terminee'||!m.date_prevue) return;
+    const d=new Date(m.date_prevue);
+    if(d>=sept && d<=auj) totaux[d.getDay()]+=Number(m.prix)||0;
+  });
+  // Réordonne pour finir sur aujourd'hui, en commençant par il y a 6 jours
+  const ordre=[]; for(let i=6;i>=0;i--){ const jr=new Date(auj); jr.setDate(auj.getDate()-i); ordre.push({d:jours[jr.getDay()],v:totaux[jr.getDay()]}); }
+  const maxR=Math.max(...ordre.map(d=>d.v),1);
+  document.getElementById('revChart').innerHTML=ordre.map((d,i)=>{
+    const h=Math.max(4,Math.round((d.v/maxR)*72));
+    const isLast=i===ordre.length-1;
+    return `<div class="rcc"><div class="rcb" style="height:${h}px;background:${isLast?'var(--brick)':'rgba(181,56,42,0.25)'}" title="${d.v.toLocaleString()} FCFA"></div><div class="rcl">${d.d}</div></div>`
+  }).join('');
+}
+
+function renderAvis(avisList){
+  const el=document.getElementById('listeAvis');
+  if(!avisList.length){ el.innerHTML='<div style="color:var(--muted);font-size:0.82rem;padding:12px 0">Pas encore d\'avis.</div>'; return; }
+  el.innerHTML=avisList.slice(0,3).map(a=>{
+    const u=a.utilisateurs||{};
+    const nomAffiche=(u.prenom||'Client')+' '+((u.nom||'').charAt(0)?u.nom.charAt(0)+'.':'');
+    const initiales=((u.prenom||'?')[0]+(u.nom||'?')[0]).toUpperCase();
+    const date=a.created_at?new Date(a.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}):'';
+    return `<div class="avli"><div class="avlt"><div class="avla" style="background:rgba(181,56,42,0.15);color:var(--brick-light)">${initiales}</div><div><div class="avln">${nomAffiche}</div><div class="avld">${date}</div></div><div class="avls">${'★'.repeat(a.note)}${'☆'.repeat(5-a.note)}</div></div>${a.commentaire?`<div class="avlx">"${a.commentaire}"</div>`:''}</div>`
+  }).join('');
+}
+
+// Charger les infos utilisateur + données réelles
+window.addEventListener('load', async function(){
   const prenom = localStorage.getItem('inibara_prenom') || 'Artisan';
   const nom = localStorage.getItem('inibara_nom') || '';
   const email = localStorage.getItem('inibara_email') || '';
   const token = localStorage.getItem('inibara_token');
+  const userId = localStorage.getItem('inibara_user_id');
 
-  // Vérifier connexion
   if(!token){
     window.location.href='inibara-connexion.html';
     return;
   }
 
-  // Mettre à jour le menu
+  // Identité (menu haut + sidebar)
   document.getElementById('dashPrenom').textContent = prenom;
   document.getElementById('dashAvatar').textContent = prenom.charAt(0).toUpperCase();
   document.getElementById('dropdownNom').textContent = prenom + ' ' + nom;
   document.getElementById('dropdownEmail').textContent = email;
+  document.querySelector('.un').textContent = prenom + ' ' + nom;
+  document.getElementById('sbAvatar').textContent = (prenom.charAt(0)+(nom.charAt(0)||'')).toUpperCase();
+  document.getElementById('welcomeMsg').textContent = 'Bonjour ' + prenom + ' 👋';
 
-  // Mettre à jour le nom dans la sidebar
-  const un = document.querySelector('.un');
-  if(un) un.textContent = prenom + ' ' + nom;
+  try{
+    // Fiche artisan (métier, note, tarif)
+    const artisans = await supaGet('artisans?utilisateur_id=eq.'+userId+'&select=*', token);
+    const artisan = artisans[0];
+    if(artisan){
+      document.getElementById('sbMetier').textContent = '🔧 ' + artisan.metier;
+      document.getElementById('wsNote').textContent = artisan.note_moyenne ? artisan.note_moyenne+'★' : '–';
+    }
+
+    // Missions de cet artisan
+    const missions = await supaGet('missions?artisan_id=eq.'+userId+'&select=*&order=date_prevue.desc', token);
+    const missionsTerminees = missions.filter(m=>m.statut==='terminee');
+    const maintenant = new Date();
+    const missionsCeMois = missions.filter(m=>m.date_prevue && new Date(m.date_prevue).getMonth()===maintenant.getMonth() && new Date(m.date_prevue).getFullYear()===maintenant.getFullYear());
+    const termineesCeMois = missionsCeMois.filter(m=>m.statut==='terminee');
+    const brut = termineesCeMois.reduce((s,m)=>s+(Number(m.prix)||0),0);
+    const commission = Math.round(brut*COMMISSION_INIBARA);
+    const net = brut-commission;
+    const enAttente = missions.filter(m=>m.statut==='en_attente').length;
+
+    document.getElementById('wsMissions').textContent = missions.length;
+    document.getElementById('welcomeSub').innerHTML = enAttente>0
+      ? `<strong style="color:var(--brick-light)">${enAttente} demande${enAttente>1?'s':''} en attente</strong>`
+      : 'Aucune demande en attente';
+    document.getElementById('statGains').textContent = net.toLocaleString();
+    document.getElementById('statMissionsMois').textContent = missionsCeMois.length;
+    document.getElementById('gainsDisponibles').textContent = net.toLocaleString();
+    document.getElementById('gainsBrut').textContent = brut.toLocaleString()+' FCFA';
+    document.getElementById('gainsCommission').textContent = '– '+commission.toLocaleString()+' FCFA';
+    document.getElementById('gainsNet').textContent = net.toLocaleString()+' FCFA';
+
+    renderMissionsRecentes(missions);
+    renderAgenda(missions);
+    renderRevenusSemaine(missions);
+
+    // Avis reçus
+    const avisList = await supaGet('avis?artisan_id=eq.'+userId+'&select=*,utilisateurs:client_id(prenom,nom)&order=created_at.desc', token);
+    document.getElementById('statAvis').textContent = avisList.length;
+    if(avisList.length){
+      const moyenne = avisList.reduce((s,a)=>s+a.note,0)/avisList.length;
+      const positifs = avisList.filter(a=>a.note>=4).length;
+      document.getElementById('wsSatisfaction').textContent = Math.round((positifs/avisList.length)*100)+'%';
+    } else {
+      document.getElementById('wsSatisfaction').textContent = '–';
+    }
+    renderAvis(avisList);
+
+  }catch(err){
+    console.error('Erreur chargement dashboard:', err);
+    toast('Certaines données n\'ont pas pu être chargées.');
+  }
 });
 </script>
 </body>
