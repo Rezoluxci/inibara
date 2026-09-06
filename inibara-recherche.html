@@ -253,22 +253,69 @@
 </div>
 <div id="toast"></div>
 <script>
-const DATA=[
-  {id:1,i:'KK',c:'#B5382A',bg:'#FFF0EE',name:'Koffi Kouamé',metier:'Plombier',ville:'Cocody',note:4.9,avis:87,tarif:5000,missions:534,dispo:true,top:true,verified:true,urgent:true,skills:['Fuite d\'eau','Canalisation','Sanitaire']},
-  {id:2,i:'DB',c:'#0F1F3D',bg:'#EEF2FF',name:'Dramane Bamba',metier:'Électricien',ville:'Yopougon',note:4.7,avis:64,tarif:7500,missions:312,dispo:true,top:false,verified:true,urgent:false,skills:['Installation','Dépannage','Tableau']},
-  {id:3,i:'AN',c:'#166534',bg:'#F0FDF4',name:'Awa N\'Goran',metier:'Menuisière',ville:'Marcory',note:4.8,avis:43,tarif:10000,missions:198,dispo:false,top:true,verified:true,urgent:false,skills:['Meubles','Portes','Parquet']},
-  {id:4,i:'IC',c:'#5B21B6',bg:'#F5F3FF',name:'Issa Coulibaly',metier:'Mécanicien',ville:'Abobo',note:4.6,avis:112,tarif:8000,missions:445,dispo:true,top:false,verified:true,urgent:true,skills:['Auto','Moto','Diagnostic']},
-  {id:5,i:'FD',c:'#9D174D',bg:'#FDF2F8',name:'Fatou Diallo',metier:'Peintre',ville:'Plateau',note:5.0,avis:28,tarif:6000,missions:87,dispo:true,top:true,verified:true,urgent:false,skills:['Intérieur','Extérieur','Déco']},
-  {id:6,i:'ST',c:'#92400E',bg:'#FFFBEB',name:'Sékou Touré',metier:'Maçon',ville:'Bouaké',note:4.5,avis:76,tarif:12000,missions:267,dispo:true,top:false,verified:false,urgent:false,skills:['Carrelage','Béton','Rénovation']},
-  {id:7,i:'MO',c:'#065F46',bg:'#ECFDF5',name:'Mamadou Ouattara',metier:'Électricien',ville:'Cocody',note:4.8,avis:55,tarif:9000,missions:178,dispo:false,top:false,verified:true,urgent:true,skills:['Climatisation','Câblage','Domotique']},
-  {id:8,i:'RK',c:'#B5382A',bg:'#FFF0EE',name:'Rose Konan',metier:'Coiffeuse',ville:'Yopougon',note:4.9,avis:134,tarif:3000,missions:620,dispo:true,top:true,verified:true,urgent:false,skills:['Tresses','Tissage','Soins']},
-  {id:9,i:'AB',c:'#1E3A5F',bg:'#EFF6FF',name:'Amadou Bah',metier:'Chauffeur',ville:'Plateau',note:4.6,avis:89,tarif:15000,missions:890,dispo:true,top:false,verified:true,urgent:true,skills:['VTC','Longue distance','Aéroport']},
-  {id:10,i:'NK',c:'#4C1D95',bg:'#EDE9FE',name:'Nadège Koffi',metier:'Couturière',ville:'Marcory',note:4.7,avis:61,tarif:5000,missions:143,dispo:true,top:false,verified:true,urgent:false,skills:['Sur mesure','Broderie','Retouches']},
-  {id:11,i:'YT',c:'#7F1D1D',bg:'#FEF2F2',name:'Youssouf Traoré',metier:'Plombier',ville:'Abobo',note:4.4,avis:38,tarif:4500,missions:112,dispo:false,top:false,verified:false,urgent:true,skills:['Fosse septique','Canalisation','Pompe']},
-  {id:12,i:'BS',c:'#0F766E',bg:'#F0FDFA',name:'Bintou Sanogo',metier:'Esthéticienne',ville:'Cocody',note:4.9,avis:97,tarif:8000,missions:234,dispo:true,top:true,verified:true,urgent:false,skills:['Manucure','Soin visage','Épilation']},
+// ── Connexion à Supabase pour charger les vrais artisans ──
+const SUPABASE_URL = 'https://ldnzjgpqkcpuawitnbel.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkbnpqZ3Bxa2NwdWF3aXRuYmVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMjQzNDIsImV4cCI6MjA5NDgwMDM0Mn0.uHaOZZsOKZrKbixl2-r75pxcLS_68Q0kvRU5mLClyHI'
+
+// Palette de couleurs réutilisée pour les avatars (cyclique)
+const PALETTE=[
+  {c:'#B5382A',bg:'#FFF0EE'},{c:'#0F1F3D',bg:'#EEF2FF'},{c:'#166534',bg:'#F0FDF4'},
+  {c:'#5B21B6',bg:'#F5F3FF'},{c:'#9D174D',bg:'#FDF2F8'},{c:'#92400E',bg:'#FFFBEB'},
+  {c:'#065F46',bg:'#ECFDF5'},{c:'#1E3A5F',bg:'#EFF6FF'},{c:'#4C1D95',bg:'#EDE9FE'},
+  {c:'#7F1D1D',bg:'#FEF2F2'},{c:'#0F766E',bg:'#F0FDFA'}
 ];
+
+function initiales(prenom,nom){
+  return ((prenom||'?')[0]+(nom||'?')[0]).toUpperCase();
+}
+
+// Transforme une ligne Supabase (artisans + son utilisateur lié) au format attendu par les cartes.
+// Remarque : nombre d'avis, badge "Top", "Urgences" et compétences ne sont pas encore stockés
+// en base — ils sont mis à des valeurs neutres par défaut plutôt qu'inventés.
+function mapArtisanSupabase(row,i){
+  const u=row.utilisateurs||{};
+  const palette=PALETTE[i%PALETTE.length];
+  return{
+    id:row.id,
+    i:initiales(u.prenom,u.nom),
+    c:palette.c,
+    bg:palette.bg,
+    name:((u.prenom||'')+' '+(u.nom||'')).trim()||'Artisan',
+    metier:row.metier||'',
+    ville:u.ville||'',
+    note:row.note_moyenne||0,
+    avis:0,
+    tarif:row.tarif_heure||0,
+    missions:row.nombre_missions||0,
+    dispo:!!row.disponible,
+    top:false,
+    verified:!!row.badge_verifie_inibara,
+    urgent:false,
+    skills:[]
+  };
+}
+
+let DATA=[];
 let curMet='';
 const saved=new Set();
+
+async function chargerArtisans(){
+  document.getElementById('rc').textContent='Chargement des artisans…';
+  try{
+    const resp=await fetch(SUPABASE_URL+'/rest/v1/artisans?select=*,utilisateurs(prenom,nom,ville)',{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+    });
+    if(!resp.ok) throw new Error('Erreur de chargement ('+resp.status+')');
+    const rows=await resp.json();
+    DATA=rows.map(mapArtisanSupabase);
+  }catch(err){
+    console.error('Erreur chargement artisans:',err);
+    document.getElementById('rc').textContent='Impossible de charger les artisans pour le moment.';
+    DATA=[];
+  }
+  document.getElementById('si').value='';
+  doSearch();
+}
 
 function renderCards(data){
   const g=document.getElementById('cg');
@@ -326,11 +373,65 @@ function setView(v){const g=document.getElementById('cg');g.classList.toggle('lv
 function toggleSave(btn,id){if(saved.has(id)){saved.delete(id);btn.textContent='🤍';btn.classList.remove('saved');toast('Retiré des favoris');}else{saved.add(id);btn.textContent='❤️';btn.classList.add('saved');toast('Ajouté aux favoris ❤️');}}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';t.style.transform='translateY(0)';setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(8px)';},2500);}
 
-document.getElementById('si').value='Plombier';
-doSearch();
+chargerArtisans();
 const style=document.createElement('style');
 style.textContent='@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}';
 document.head.appendChild(style);
 </script>
+
+<script>
+// ── INIBARA : Gestion connexion/déconnexion ──
+function seDeconnecter(){
+  localStorage.removeItem('inibara_token');
+  localStorage.removeItem('inibara_user_id');
+  localStorage.removeItem('inibara_email');
+  localStorage.removeItem('inibara_type');
+  localStorage.removeItem('inibara_prenom');
+  localStorage.removeItem('inibara_nom');
+  window.location.href='index.html';
+}
+
+function mettreAJourNav(){
+  const token = localStorage.getItem('inibara_token');
+  const prenom = localStorage.getItem('inibara_prenom') || '';
+  const type = localStorage.getItem('inibara_type') || 'client';
+
+  const menuNonConnecte = document.getElementById('menuNonConnecte');
+  const menuConnecte = document.getElementById('menuConnecte');
+  const navPrenom = document.getElementById('navPrenom');
+  const navAvatar = document.getElementById('navAvatar');
+  const dropdownDashboard = document.getElementById('dropdownDashboard');
+
+  if(token && prenom){
+    if(menuNonConnecte) menuNonConnecte.style.display='none';
+    if(menuConnecte) menuConnecte.style.display='flex';
+    if(navPrenom) navPrenom.textContent = prenom;
+    if(navAvatar) navAvatar.textContent = prenom.charAt(0).toUpperCase();
+    if(dropdownDashboard){
+      dropdownDashboard.href = type==='artisan' ? 'inibara-dashboard-artisan.html' : 'inibara-recherche.html';
+      dropdownDashboard.textContent = type==='artisan' ? '🔧 Mon espace artisan' : '🙋 Mon espace client';
+    }
+  } else {
+    if(menuNonConnecte) menuNonConnecte.style.display='flex';
+    if(menuConnecte) menuConnecte.style.display='none';
+  }
+}
+
+function toggleUserMenu(){
+  const d=document.getElementById('userDropdown');
+  if(d) d.style.display=d.style.display==='none'?'block':'none';
+}
+
+document.addEventListener('click',function(e){
+  const wrap=document.getElementById('userMenuWrap');
+  if(wrap&&!wrap.contains(e.target)){
+    const d=document.getElementById('userDropdown');
+    if(d) d.style.display='none';
+  }
+});
+
+window.addEventListener('load', mettreAJourNav);
+</script>
+
 </body>
 </html>
