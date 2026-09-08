@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inibara – Mon Espace Client</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --brick:#B5382A;--brick-dark:#8C2820;--brick-light:#D4544A;--brick-glow:rgba(181,56,42,0.12);
+      --navy:#0F1F3D;--navy-mid:#162848;--navy-light:#1E3560;
+      --gold:#D4A843;--gold-light:#F0C96A;
+      --green:#22C55E;--red:#F43F5E;--blue:#60A5FA;--yellow:#FBBF24;
+      --bg:#080F1E;--s1:#0C1526;--s2:#101D32;--s3:#16243E;--s4:#1C2D4A;
+      --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+      --muted:rgba(255,255,255,0.4);--sub:rgba(255,255,255,0.65);--white:#FFFFFF;--gray:#6B7280;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html,body{height:100%;overflow:hidden;}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--white);display:flex;}
+
+    .sidebar{width:220px;min-width:220px;background:var(--s1);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;}
+    .sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border);}
+    .logo-wrap{display:flex;align-items:center;gap:9px;}
+    .lm{width:32px;height:32px;background:linear-gradient(135deg,var(--brick),var(--brick-dark));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:.95rem;color:#fff;box-shadow:0 4px 10px rgba(181,56,42,0.3);}
+    .lt{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:800;}
+    .lt span{color:var(--brick-light);}
+    .sb-user{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+    .ua{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--brick),var(--brick-dark));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:.88rem;flex-shrink:0;}
+    .un{font-size:0.86rem;font-weight:600;}
+    .um{font-size:0.7rem;color:var(--brick-light);}
+    .us{display:flex;align-items:center;gap:4px;font-size:0.68rem;color:var(--green);margin-top:2px;}
+    .usd{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite;}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .sb-nav{flex:1;padding:12px 10px;overflow-y:auto;}
+    .ng{font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--gray);padding:11px 8px 4px;}
+    .ni{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:8px;cursor:pointer;transition:all .18s;font-size:0.82rem;color:var(--muted);margin-bottom:1px;}
+    .ni:hover{background:rgba(255,255,255,0.05);color:var(--white);}
+    .ni.active{background:var(--brick-glow);color:var(--brick-light);border-left:2px solid var(--brick);}
+    .ni .ic{font-size:0.9rem;width:17px;text-align:center;}
+    .nb{margin-left:auto;background:var(--brick);color:#fff;font-size:0.58rem;font-weight:700;padding:2px 6px;border-radius:50px;}
+    .nb.r{background:var(--red);}
+
+    .main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+    .topbar{padding:13px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--s1);flex-shrink:0;}
+    .pt{font-family:'Playfair Display',serif;font-size:1.08rem;font-weight:800;}
+    .pd{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+    .tr{display:flex;align-items:center;gap:9px;}
+    .tb{padding:7px 14px;border-radius:7px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;font-size:0.78rem;font-weight:500;transition:all .2s;}
+    .tb-g{background:rgba(255,255,255,0.06);color:var(--white);}
+    .tb-b{background:var(--brick);color:#fff;}
+    .tb-b:hover{background:var(--brick-dark);}
+    .nbb{position:relative;width:32px;height:32px;background:rgba(255,255,255,0.06);border:none;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem;}
+    .nbd{position:absolute;top:5px;right:5px;width:6px;height:6px;background:var(--brick);border-radius:50%;}
+
+    .content{flex:1;overflow-y:auto;padding:18px 22px;}
+
+    .welcome{background:linear-gradient(120deg,var(--navy-mid),var(--s4));border:1px solid rgba(181,56,42,0.2);border-radius:13px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;position:relative;overflow:hidden;flex-wrap:wrap;gap:14px;}
+    .welcome::before{content:'';position:absolute;top:-30px;right:-30px;width:150px;height:150px;background:radial-gradient(circle,rgba(181,56,42,0.15),transparent 70%);}
+    .wl h2{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:800;}
+    .wl p{color:var(--muted);font-size:0.8rem;margin-top:4px;}
+    .ws{display:flex;gap:22px;position:relative;z-index:1;}
+    .wsi{text-align:center;}
+    .wsn{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:800;color:var(--brick-light);}
+    .wsl{font-size:0.65rem;color:var(--muted);margin-top:2px;}
+
+    .cta{background:var(--s2);border:1px solid var(--border);border-radius:11px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px;}
+    .cta-t{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:800;}
+    .cta-s{font-size:0.75rem;color:var(--muted);margin-top:3px;}
+
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+    .panel{background:var(--s2);border:1px solid var(--border);border-radius:11px;overflow:hidden;}
+    .ph{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+    .pht{font-family:'Playfair Display',serif;font-size:0.88rem;font-weight:700;}
+    .phs{font-size:0.68rem;color:var(--gray);margin-top:2px;}
+    .pb{padding:15px 18px;}
+
+    .ml{display:flex;flex-direction:column;gap:9px;}
+    .mi{display:flex;align-items:center;gap:12px;background:var(--s3);border:1px solid var(--border);border-radius:9px;padding:12px 14px;}
+    .mii{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;background:rgba(181,56,42,0.1);}
+    .mit{font-size:0.85rem;font-weight:500;}
+    .mim{font-size:0.72rem;color:var(--gray);margin-top:2px;display:flex;gap:9px;flex-wrap:wrap;}
+    .mir{text-align:right;margin-left:auto;}
+    .mip{font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:700;}
+    .ms{font-size:0.68rem;padding:2px 8px;border-radius:50px;margin-top:4px;display:inline-block;}
+    .ms-done{background:rgba(34,197,94,0.1);color:var(--green);}
+    .ms-prog{background:rgba(181,56,42,0.1);color:var(--brick-light);}
+    .ms-wait{background:rgba(96,165,250,0.1);color:var(--blue);}
+    .ms-can{background:rgba(244,63,94,0.1);color:var(--red);}
+
+    .avl{display:flex;flex-direction:column;gap:0;}
+    .avli{padding:12px 0;border-bottom:1px solid var(--border);}
+    .avli:last-child{border-bottom:none;}
+    .avlt{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+    .avla{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:800;font-size:0.68rem;flex-shrink:0;}
+    .avln{font-size:0.82rem;font-weight:500;}
+    .avld{font-size:0.68rem;color:var(--muted);}
+    .avls{margin-left:auto;color:var(--yellow);font-size:0.75rem;}
+    .avlx{font-size:0.78rem;color:var(--muted);}
+
+    ::-webkit-scrollbar{width:3px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:rgba(181,56,42,0.3);border-radius:2px;}
+    #toast{position:fixed;bottom:18px;right:18px;z-index:999;background:var(--s2);border-left:3px solid var(--brick);color:#fff;padding:10px 16px;border-radius:8px;font-size:0.8rem;opacity:0;transform:translateY(8px);transition:all .28s;pointer-events:none;}
+  </style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sb-logo"><div class="logo-wrap"><div class="lm">I</div><div class="lt">Inibara<span>.ci</span></div></div></div>
+  <div class="sb-user"><div class="ua" id="sbAvatar">?</div><div><div class="un">Chargement…</div><div class="um">🙋 Client</div><div class="us"><div class="usd"></div>En ligne</div></div></div>
+  <nav class="sb-nav">
+    <div class="ng">Principal</div>
+    <div class="ni active" onclick="nav(this,'Tableau de bord')"><span class="ic">📊</span>Tableau de bord</div>
+    <div class="ni" onclick="nav(this,'Mes Missions')"><span class="ic">📋</span>Mes Missions <span class="nb" id="navBadgeMissions" style="display:none">0</span></div>
+    <div class="ni" onclick="nav(this,'Historique')"><span class="ic">🕘</span>Historique</div>
+    <div class="ni" onclick="nav(this,'Avis laissés')"><span class="ic">⭐</span>Avis laissés</div>
+    <div class="ng">Profil</div>
+    <div class="ni" onclick="nav(this,'Favoris')"><span class="ic">❤️</span>Favoris</div>
+    <div class="ni" onclick="nav(this,'Messagerie')"><span class="ic">💬</span>Messagerie</div>
+    <div class="ng">Compte</div>
+    <div class="ni" onclick="nav(this,'Paiements')"><span class="ic">💳</span>Paiements</div>
+    <div class="ni" onclick="nav(this,'Paramètres')"><span class="ic">⚙️</span>Paramètres</div>
+  </nav>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="pt" id="pageTitle">Tableau de bord</div><div class="pd">Cocody, Abidjan 🇨🇮</div></div>
+    <div class="tr">
+      <button class="tb tb-b" onclick="window.location.href='inibara-recherche.html'">🔍 Trouver un artisan</button>
+      <button class="nbb">🔔<div class="nbd"></div></button>
+      <div style="position:relative;" id="userMenuWrap">
+        <button onclick="toggleUserMenu()" style="display:flex;align-items:center;gap:7px;background:rgba(181,56,42,0.15);border:1px solid rgba(181,56,42,0.3);color:#fff;padding:7px 12px;border-radius:7px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:0.8rem;">
+          <span id="dashAvatar" style="width:24px;height:24px;border-radius:50%;background:var(--brick);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.72rem;">?</span>
+          <span id="dashPrenom">Mon compte</span>
+          <span>▾</span>
+        </button>
+        <div id="userDropdown" style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:#1A2845;border:1px solid rgba(255,255,255,0.1);border-radius:10px;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:200;overflow:hidden;">
+          <div style="padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03);">
+            <div id="dropdownNom" style="font-family:'Playfair Display',serif;font-size:0.88rem;font-weight:800;color:#fff;">Client</div>
+            <div id="dropdownEmail" style="font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:2px;">email@inibara.ci</div>
+            <div style="font-size:0.68rem;color:var(--brick-light);font-weight:600;margin-top:3px;">🙋 Client Inibara</div>
+          </div>
+          <a href="index.html" style="display:flex;align-items:center;gap:9px;padding:11px 16px;color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.07);">🏠 Retour à l'accueil</a>
+          <a href="#" onclick="seDeconnecter()" style="display:flex;align-items:center;gap:9px;padding:11px 16px;color:#F43F5E;text-decoration:none;font-size:0.82rem;">🚪 Se déconnecter</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="welcome">
+      <div class="wl"><h2 id="welcomeMsg">Bonjour 👋</h2><p id="welcomeSub">Chargement de vos missions…</p></div>
+      <div class="ws">
+        <div class="wsi"><div class="wsn" id="wsEnCours">–</div><div class="wsl">Missions en cours</div></div>
+        <div class="wsi"><div class="wsn" id="wsTerminees">–</div><div class="wsl">Missions terminées</div></div>
+        <div class="wsi"><div class="wsn" id="wsAvis">–</div><div class="wsl">Avis laissés</div></div>
+      </div>
+    </div>
+
+    <div class="cta">
+      <div><div class="cta-t">Besoin d'un artisan ?</div><div class="cta-s">Plombier, électricien, mécanicien… trouvez le bon près de chez vous.</div></div>
+      <button class="tb tb-b" onclick="window.location.href='inibara-recherche.html'">🔍 Rechercher</button>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <div class="ph"><div><div class="pht">Missions en cours</div><div class="phs">En attente, confirmées ou en cours</div></div></div>
+        <div class="pb"><div class="ml" id="listeMissionsEnCours"><div style="color:var(--muted);font-size:0.82rem">Chargement…</div></div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><div><div class="pht">Historique</div><div class="phs">Missions terminées ou annulées</div></div></div>
+        <div class="pb"><div class="ml" id="listeHistorique"><div style="color:var(--muted);font-size:0.82rem">Chargement…</div></div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="ph"><div><div class="pht">⭐ Avis que vous avez laissés</div></div></div>
+      <div class="pb"><div class="avl" id="listeAvisLaisses"><div style="color:var(--muted);font-size:0.82rem;padding:12px 0">Chargement…</div></div></div>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+<script>
+const SUPABASE_URL = 'https://ldnzjgpqkcpuawitnbel.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkbnpqZ3Bxa2NwdWF3aXRuYmVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMjQzNDIsImV4cCI6MjA5NDgwMDM0Mn0.uHaOZZsOKZrKbixl2-r75pxcLS_68Q0kvRU5mLClyHI'
+
+function nav(el,title){document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));el.classList.add('active');document.getElementById('pageTitle').textContent=title;if(title!=='Tableau de bord')toast('Section "'+title+'" – bientôt disponible');}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';t.style.transform='translateY(0)';setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(8px)';},2800);}
+function toggleUserMenu(){const d=document.getElementById('userDropdown');d.style.display=d.style.display==='none'?'block':'none';}
+document.addEventListener('click',function(e){const wrap=document.getElementById('userMenuWrap');if(wrap&&!wrap.contains(e.target)){document.getElementById('userDropdown').style.display='none';}});
+function seDeconnecter(){
+  localStorage.removeItem('inibara_token');localStorage.removeItem('inibara_user_id');localStorage.removeItem('inibara_email');
+  localStorage.removeItem('inibara_type');localStorage.removeItem('inibara_prenom');localStorage.removeItem('inibara_nom');
+  window.location.href='index.html';
+}
+
+async function supaGet(path, token){
+  const resp = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + (token || SUPABASE_KEY) }
+  })
+  if(!resp.ok) throw new Error('Erreur Supabase (' + resp.status + ')')
+  return await resp.json()
+}
+
+function classeStatut(s){return {en_attente:'ms-wait',confirmee:'ms-wait',en_cours:'ms-prog',terminee:'ms-done',annulee:'ms-can'}[s]||'ms-wait';}
+function libelleStatut(s){return {en_attente:'En attente',confirmee:'Confirmée',en_cours:'En cours',terminee:'Terminée',annulee:'Annulée'}[s]||s;}
+
+function renderMissions(missions, elId, vide){
+  const el=document.getElementById(elId);
+  if(!missions.length){ el.innerHTML='<div style="color:var(--muted);font-size:0.82rem">'+vide+'</div>'; return; }
+  el.innerHTML=missions.map(m=>{
+    const date=m.date_prevue?new Date(m.date_prevue).toLocaleDateString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'';
+    return `<div class="mi"><div class="mii">🛠️</div><div><div class="mit">${m.titre}</div><div class="mim"><span>📍 ${m.lieu||'—'}</span><span>🕐 ${date}</span></div></div><div class="mir"><div class="mip">${Number(m.prix).toLocaleString()} FCFA</div><div class="ms ${classeStatut(m.statut)}">${libelleStatut(m.statut)}</div></div></div>`
+  }).join('');
+}
+
+function renderAvisLaisses(avisList){
+  const el=document.getElementById('listeAvisLaisses');
+  if(!avisList.length){ el.innerHTML='<div style="color:var(--muted);font-size:0.82rem;padding:12px 0">Vous n\'avez pas encore laissé d\'avis.</div>'; return; }
+  el.innerHTML=avisList.map(a=>{
+    const u=a.utilisateurs||{};
+    const nomArtisan=((u.prenom||'')+' '+(u.nom||'')).trim()||'Artisan';
+    const initiales=((u.prenom||'?')[0]+(u.nom||'?')[0]).toUpperCase();
+    const date=a.created_at?new Date(a.created_at).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}):'';
+    return `<div class="avli"><div class="avlt"><div class="avla" style="background:rgba(181,56,42,0.15);color:var(--brick-light)">${initiales}</div><div><div class="avln">${nomArtisan}</div><div class="avld">${date}</div></div><div class="avls">${'★'.repeat(a.note)}${'☆'.repeat(5-a.note)}</div></div>${a.commentaire?`<div class="avlx">"${a.commentaire}"</div>`:''}</div>`
+  }).join('');
+}
+
+window.addEventListener('load', async function(){
+  const prenom = localStorage.getItem('inibara_prenom') || 'Client';
+  const nom = localStorage.getItem('inibara_nom') || '';
+  const email = localStorage.getItem('inibara_email') || '';
+  const token = localStorage.getItem('inibara_token');
+  const userId = localStorage.getItem('inibara_user_id');
+
+  if(!token){ window.location.href='inibara-connexion.html'; return; }
+
+  document.getElementById('dashPrenom').textContent = prenom;
+  document.getElementById('dashAvatar').textContent = prenom.charAt(0).toUpperCase();
+  document.getElementById('dropdownNom').textContent = prenom + ' ' + nom;
+  document.getElementById('dropdownEmail').textContent = email;
+  document.querySelector('.un').textContent = prenom + ' ' + nom;
+  document.getElementById('sbAvatar').textContent = (prenom.charAt(0)+(nom.charAt(0)||'')).toUpperCase();
+  document.getElementById('welcomeMsg').textContent = 'Bonjour ' + prenom + ' 👋';
+
+  try{
+    const missions = await supaGet('missions?client_id=eq.'+userId+'&select=*&order=date_prevue.desc', token);
+    const enCours = missions.filter(m=>['en_attente','confirmee','en_cours'].includes(m.statut));
+    const historique = missions.filter(m=>['terminee','annulee'].includes(m.statut));
+    const terminees = missions.filter(m=>m.statut==='terminee');
+
+    document.getElementById('wsEnCours').textContent = enCours.length;
+    document.getElementById('wsTerminees').textContent = terminees.length;
+    document.getElementById('welcomeSub').textContent = enCours.length>0
+      ? enCours.length+' mission'+(enCours.length>1?'s':'')+' en cours'
+      : 'Aucune mission en cours';
+    if(enCours.length>0){
+      document.getElementById('navBadgeMissions').style.display='inline-block';
+      document.getElementById('navBadgeMissions').textContent=enCours.length;
+    }
+
+    renderMissions(enCours,'listeMissionsEnCours','Aucune mission en cours. Trouvez un artisan pour commencer !');
+    renderMissions(historique,'listeHistorique','Aucun historique pour le moment.');
+
+    const avisList = await supaGet('avis?client_id=eq.'+userId+'&select=*,utilisateurs:artisan_id(prenom,nom)&order=created_at.desc', token);
+    document.getElementById('wsAvis').textContent = avisList.length;
+    renderAvisLaisses(avisList);
+
+  }catch(err){
+    console.error('Erreur chargement dashboard client:', err);
+    toast('Certaines données n\'ont pas pu être chargées.');
+  }
+});
+</script>
+</body>
+</html>
